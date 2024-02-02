@@ -28,6 +28,10 @@ if 'token' not in st.session_state:
         # If authorization successful, save token in session state
         st.session_state.token = result.get('token')
         st.write(str(result.get('token',"")))
+        print(st.session_state.token)
+        print(result.get('token'))
+        print(result)
+        st.write(result)
         st.experimental_rerun()
 else:
     # If token exists in session state, show the token
