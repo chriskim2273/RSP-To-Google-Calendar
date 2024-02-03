@@ -53,19 +53,20 @@ if "token" not in st.session_state:
         email = payload["email"]
         """
         st.session_state["token"] = result["token"]
-        uploaded_file = st.file_uploader("Choose a CSV file", type='csv')
-
-        # Process the uploaded file
-        if uploaded_file:
-            bytes_data = uploaded_file.read()
-            st.write("Filename:", uploaded_file.name)
-            st.write(bytes_data)
         st.rerun()
 else:
     st.write("You are logged in!")
     st.write(st.session_state["token"])
-    st.button("Logout")
-    del st.session_state["token"]
+    uploaded_file = st.file_uploader("Choose a CSV file", type='csv')
+
+    # Process the uploaded file
+    if uploaded_file:
+        bytes_data = uploaded_file.read()
+        st.write("Filename:", uploaded_file.name)
+        st.write(bytes_data)
+    logout = st.button("Logout")
+    if logout:
+        del st.session_state["token"]
 
 
 def create_events():
