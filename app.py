@@ -35,7 +35,7 @@ if "auth" not in st.session_state:
     if result:
         st.write(result)
         # decode the id_token jwt and get the user's email address
-        id_token = result["token"]["id_token"]
+        id_token = result["token"]["access_token"]
         # verify the signature is an optional step for security
         payload = id_token.split(".")[1]
         # add padding to the payload if needed
