@@ -89,6 +89,7 @@ if uploaded_file:
     for i, row in enumerate(nested_data):
         for j, item in enumerate(row):
             print(f"({str(i)},{str(j)}): {str(item)}")
+            st.write(f"({str(i)},{str(j)}): {str(item)}")
 
 def create_events():
     # Define the URL
