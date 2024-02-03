@@ -3,6 +3,8 @@ import streamlit as st
 from streamlit_oauth import OAuth2Component
 import os
 import json
+import requests
+from datetime import datetime
 
 # Load environment variables from .env file
 from dotenv import load_dotenv
@@ -51,9 +53,52 @@ if "token" not in st.session_state:
         email = payload["email"]
         """
         st.session_state["token"] = result["token"]
+        uploaded_file = st.file_uploader("Choose a CSV file", type='csv')
+
+        # Process the uploaded file
+        if uploaded_file:
+            bytes_data = uploaded_file.read()
+            st.write("Filename:", uploaded_file.name)
+            st.write(bytes_data)
         st.rerun()
 else:
     st.write("You are logged in!")
     st.write(st.session_state["token"])
     st.button("Logout")
     del st.session_state["token"]
+
+
+def create_events():
+    # Define the URL
+    url = 'https://www.googleapis.com/calendar/v3/calendars/primary/events'
+
+    # Define the headers
+    headers = {
+        'Authorization': 'Bearer ' + str(st.session_state['token']),
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+
+    # Define the event
+    event = {
+        'summary': 'New Event',
+        'location': '800 Howard St., San Francisco, CA 94103',
+        'description': 'A chance to hear more about Google\'s developer products.',
+        'start': {
+            'dateTime': '2024-02-28T09:00:00-07:00',
+            'timeZone': 'America/Los_Angeles',
+        },
+        'end': {
+            'dateTime': '2024-02-28T17:00:00-07:00',
+            'timeZone': 'America/Los_Angeles',
+        },
+    }
+
+    # Send the POST request
+    response = requests.post(url, headers=headers, data=json.dumps(event))
+
+    # Check the response
+    if response.status_code == 200:
+        print('Event created successfully')
+    else:
+        print('Failed to create event:', response.content)
