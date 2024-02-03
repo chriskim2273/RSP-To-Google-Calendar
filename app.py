@@ -29,6 +29,7 @@ if 'token' not in st.session_state:
         st.session_state.token = result.get('token')
         #st.write(str(result.get('access_token',"")))
         st.write(result)
+        st.write(result.get("access_token",""))
         st.rerun()
 else:
     # If token exists in session state, show the token
