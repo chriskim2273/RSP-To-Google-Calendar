@@ -31,8 +31,8 @@ if 'token' not in st.session_state:
         #st.write(str(result.get('access_token',"")))
         result = json.loads(result)
         st.write(result)
-        st.write(result.get("access_token","JEOJJOEJOEEJO"))
-        st.write(result.get("token", "mamama"))
+        st.write(result.get("access_token",{"hi": "joe"}))
+        st.write(result.get("token", {"bye":"mama"}))
         st.rerun()
 else:
     # If token exists in session state, show the token
