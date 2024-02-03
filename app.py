@@ -63,8 +63,8 @@ else:
     # Process the uploaded file
     if uploaded_file:
         df = pd.read_csv(uploaded_file)
-        st.table(df)
         st.dataframe(df)
+        st.data_editor(df)
         bytes_data = uploaded_file.read()
         st.write("Filename:", uploaded_file.name)
         st.write(bytes_data)
