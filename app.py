@@ -24,7 +24,7 @@ st.write(REDIRECT_URI)
 if 'token' not in st.session_state:
     # If not, show authorize button
     result = oauth2.authorize_button("Authorize", REDIRECT_URI, SCOPE)
-    if result and 'access_token' in result:
+    if result and 'token' in result:
         # If authorization successful, save token in session state
         st.session_state.token = result.get('access_token')
         st.write(str(result.get('access_token',"")))
@@ -32,7 +32,7 @@ if 'token' not in st.session_state:
         print(result.get('access_token'))
         print(result)
         st.write(result)
-        st.experimental_rerun()
+        st.rerun()
 else:
     # If token exists in session state, show the token
     token = st.session_state['token']
@@ -41,4 +41,4 @@ else:
         # If refresh token button is clicked, refresh the token
         token = oauth2.refresh_token(token)
         st.session_state.token = token
-        st.experimental_rerun()
+        st.rerun()
