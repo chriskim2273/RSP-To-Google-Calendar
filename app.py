@@ -29,7 +29,7 @@ if 'token' not in st.session_state:
         # If authorization successful, save token in session state
         st.session_state.token = result.get('token')
         #st.write(str(result.get('access_token',"")))
-        result = json.loads(result)
+        #result = json.loads(result)
         st.write(result)
         st.write(result.get("access_token",{"hi": "joe"}))
         st.write(result.get("token", {"bye":"mama"}))
