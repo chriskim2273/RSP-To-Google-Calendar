@@ -27,10 +27,7 @@ if 'token' not in st.session_state:
     if result and 'token' in result:
         # If authorization successful, save token in session state
         st.session_state.token = result.get('access_token')
-        st.write(str(result.get('access_token',"")))
-        print(st.session_state.token)
-        print(result.get('access_token'))
-        print(result)
+        #st.write(str(result.get('access_token',"")))
         st.write(result)
         st.rerun()
 else:
