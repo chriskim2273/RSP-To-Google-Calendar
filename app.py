@@ -18,7 +18,7 @@ CLIENT_SECRET = os.environ.get('CLIENT_SECRET',st.secrets["CLIENT_SECRET"])
 REDIRECT_URI = 'https://rsp-to-app-calendar-cy7d5hqhrsdu64brgr2knj.streamlit.app'#os.environ.get('REDIRECT_URI',st.secrets["REDIRECT_URI"])
 SCOPE = os.environ.get('SCOPE',st.secrets["SCOPE"])
 
-if "auth" not in st.session_state:
+if "token" not in st.session_state:
     # create a button to start the OAuth2 flow
     oauth2 = OAuth2Component(CLIENT_ID, CLIENT_SECRET, AUTHORIZE_URL, TOKEN_URL, REFRESH_TOKEN_URL, REVOKE_TOKEN_URL)
     result = oauth2.authorize_button(
@@ -36,6 +36,7 @@ if "auth" not in st.session_state:
         st.write(result)
         # decode the id_token jwt and get the user's email address
         id_token = result["token"]["access_token"]
+        """
         # verify the signature is an optional step for security
         payload = id_token.split(".")[1]
         # add padding to the payload if needed
@@ -48,13 +49,11 @@ if "auth" not in st.session_state:
             # handle non-base64 characters
             payload_bytes = base64.urlsafe_b64decode(payload.encode('utf-8').replace('-', '+').replace('_', '/').decode('utf-8'))
         email = payload["email"]
-        st.session_state["auth"] = email
+        """
         st.session_state["token"] = result["token"]
         st.rerun()
 else:
     st.write("You are logged in!")
-    st.write(st.session_state["auth"])
     st.write(st.session_state["token"])
     st.button("Logout")
-    del st.session_state["auth"]
     del st.session_state["token"]
