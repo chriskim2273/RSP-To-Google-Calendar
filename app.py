@@ -1,3 +1,4 @@
+import base64
 import streamlit as st
 from streamlit_oauth import OAuth2Component
 import os
@@ -17,29 +18,37 @@ CLIENT_SECRET = os.environ.get('CLIENT_SECRET',st.secrets["CLIENT_SECRET"])
 REDIRECT_URI = 'https://rsp-to-app-calendar-cy7d5hqhrsdu64brgr2knj.streamlit.app'#os.environ.get('REDIRECT_URI',st.secrets["REDIRECT_URI"])
 SCOPE = os.environ.get('SCOPE',st.secrets["SCOPE"])
 
-# Create OAuth2Component instance
-oauth2 = OAuth2Component(CLIENT_ID, CLIENT_SECRET, AUTHORIZE_URL, TOKEN_URL, REFRESH_TOKEN_URL, REVOKE_TOKEN_URL)
-
-st.write(REDIRECT_URI)
-# Check if token exists in session state
-if 'token' not in st.session_state:
-    # If not, show authorize button
-    result = oauth2.authorize_button("Authorize", REDIRECT_URI, SCOPE)
-    if result and 'token' in result:
-        # If authorization successful, save token in session state
-        st.session_state.token = result.get('token')
-        #st.write(str(result.get('access_token',"")))
-        #result = json.loads(result)
+if "auth" not in st.session_state:
+    # create a button to start the OAuth2 flow
+    oauth2 = OAuth2Component(CLIENT_ID, CLIENT_SECRET, AUTHORIZE_URL, TOKEN_URL, REFRESH_TOKEN_URL, REVOKE_TOKEN_URL)
+    result = oauth2.authorize_button(
+        name="Continue with Google",
+        icon="https://www.google.com.tw/favicon.ico",
+        redirect_uri=REDIRECT_URI, #"http://localhost:8501",
+        scope=SCOPE #"openid email profile",
+        key="google",
+        extras_params={"prompt": "consent"}#, "access_type": "offline"},
+        use_container_width=True,
+        pkce='S256',
+    )
+    
+    if result:
         st.write(result)
-        st.write(result.get("access_token",{"hi": "joe"}))
-        st.write(result.get("token", {"bye":"mama"}))
+        # decode the id_token jwt and get the user's email address
+        id_token = result["token"]["id_token"]
+        # verify the signature is an optional step for security
+        payload = id_token.split(".")[1]
+        # add padding to the payload if needed
+        payload += "=" * (-len(payload) % 4)
+        payload = json.loads(base64.b64decode(payload))
+        email = payload["email"]
+        st.session_state["auth"] = email
+        st.session_state["token"] = result["token"]
         st.rerun()
 else:
-    # If token exists in session state, show the token
-    token = st.session_state['token']
-    st.json(token)
-    if st.button("Refresh Token"):
-        # If refresh token button is clicked, refresh the token
-        token = oauth2.refresh_token(token)
-        st.session_state.token = token
-        st.rerun()
+    st.write("You are logged in!")
+    st.write(st.session_state["auth"])
+    st.write(st.session_state["token"])
+    st.button("Logout")
+    del st.session_state["auth"]
+    del st.session_state["token"]
