@@ -86,9 +86,9 @@ if uploaded_file:
     st.dataframe(df)
 
     nested_data = df.values.tolist()
-    for row in nested_data:
-        for item in row:
-            print(item)
+    for i, row in enumerate(nested_data):
+        for j, item in enumerate(row):
+            print(f"({i},{j}): {item}")
 
 def create_events():
     # Define the URL
