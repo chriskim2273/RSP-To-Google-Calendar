@@ -88,7 +88,7 @@ if uploaded_file:
     nested_data = df.values.tolist()
     for i, row in enumerate(nested_data):
         for j, item in enumerate(row):
-            print(f"({i},{j}): {item}")
+            print(f"({str(i)},{str(j)}): {str(item)}")
 
 def create_events():
     # Define the URL
