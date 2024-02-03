@@ -5,6 +5,7 @@ import os
 import json
 import requests
 from datetime import datetime
+import pandas as pd
 
 # Load environment variables from .env file
 from dotenv import load_dotenv
@@ -61,6 +62,9 @@ else:
 
     # Process the uploaded file
     if uploaded_file:
+        df = pd.read_csv(uploaded_file)
+        st.table(df)
+        st.dataframe(df)
         bytes_data = uploaded_file.read()
         st.write("Filename:", uploaded_file.name)
         st.write(bytes_data)
