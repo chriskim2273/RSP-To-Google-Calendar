@@ -13,14 +13,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Set environment variables
-AUTHORIZE_URL = os.environ.get('AUTHORIZE_URL',st.secrets["AUTHORIZE_URL"])
-TOKEN_URL = os.environ.get('TOKEN_URL',st.secrets["TOKEN_URL"])
-REFRESH_TOKEN_URL = os.environ.get('REFRESH_TOKEN_URL',st.secrets["REFRESH_TOKEN_URL"])
-REVOKE_TOKEN_URL = os.environ.get('REVOKE_TOKEN_URL',st.secrets["REVOKE_TOKEN_URL"])
-CLIENT_ID = os.environ.get('CLIENT_ID',st.secrets["CLIENT_ID"])
-CLIENT_SECRET = os.environ.get('CLIENT_SECRET',st.secrets["CLIENT_SECRET"])
+AUTHORIZE_URL = os.environ.get('AUTHORIZE_URL')#,st.secrets["AUTHORIZE_URL"])
+TOKEN_URL = os.environ.get('TOKEN_URL')#,st.secrets["TOKEN_URL"])
+REFRESH_TOKEN_URL = os.environ.get('REFRESH_TOKEN_URL')#,st.secrets["REFRESH_TOKEN_URL"])
+REVOKE_TOKEN_URL = os.environ.get('REVOKE_TOKEN_URL')#,st.secrets["REVOKE_TOKEN_URL"])
+CLIENT_ID = os.environ.get('CLIENT_ID')#,st.secrets["CLIENT_ID"])
+CLIENT_SECRET = os.environ.get('CLIENT_SECRET')#,st.secrets["CLIENT_SECRET"])
 REDIRECT_URI = 'https://rsp-to-app-calendar-cy7d5hqhrsdu64brgr2knj.streamlit.app'#os.environ.get('REDIRECT_URI',st.secrets["REDIRECT_URI"])
-SCOPE = os.environ.get('SCOPE',st.secrets["SCOPE"])
+SCOPE = os.environ.get('SCOPE')#,st.secrets["SCOPE"])
 
 if "token" not in st.session_state:
     # create a button to start the OAuth2 flow
@@ -66,9 +66,11 @@ else:
         df = pd.read_csv(uploaded_file)
         st.dataframe(df)
 
-        spamreader = csv.reader(uploaded_file, delimiter=',')
-        for row in spamreader:
-            st.write(row)
+        nested_data = df.values.tolist()
+        for row in nested_data:
+            for item in row:
+                print(item)
+                st.write(item)
         bytes_data = uploaded_file.read()
         st.write("Filename:", uploaded_file.name)
         st.write(bytes_data)
@@ -76,6 +78,17 @@ else:
     if logout:
         del st.session_state["token"]
 
+uploaded_file = st.file_uploader("Choose a CSV file", type='csv')
+
+# Process the uploaded file
+if uploaded_file:
+    df = pd.read_csv(uploaded_file)
+    st.dataframe(df)
+
+    nested_data = df.values.tolist()
+    for row in nested_data:
+        for item in row:
+            print(item)
 
 def create_events():
     # Define the URL
