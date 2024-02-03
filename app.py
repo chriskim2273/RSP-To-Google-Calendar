@@ -42,11 +42,11 @@ if "auth" not in st.session_state:
         payload += "=" * (-len(payload) % 4)
         # encode the payload to bytes before decoding from base64url
         try:
-            payload_bytes = base64.urlsafe_b64decode(payload.encode('utf-8').decode())
+            payload_bytes = base64.urlsafe_b64decode(payload.encode('utf-8').decode('utf-8'))
         except Exception as e:
             print(f"Error decoding payload: {e}")
             # handle non-base64 characters
-            payload_bytes = base64.urlsafe_b64decode(payload.encode('utf-8').replace('-', '+').replace('_', '/').decode())
+            payload_bytes = base64.urlsafe_b64decode(payload.encode('utf-8').replace('-', '+').replace('_', '/').decode('utf-8'))
         email = payload["email"]
         st.session_state["auth"] = email
         st.session_state["token"] = result["token"]
