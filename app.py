@@ -78,7 +78,7 @@ else:
     if logout:
         del st.session_state["token"]
 
-uploaded_file = st.file_uploader("Choose a CSV file", type='csv')
+uploaded_file = st.file_uploader("Choose a CSV file", type='csv', key = "test")
 
 # Process the uploaded file
 if uploaded_file:
