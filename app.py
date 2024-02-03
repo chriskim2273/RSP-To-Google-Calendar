@@ -25,9 +25,9 @@ if "auth" not in st.session_state:
         name="Continue with Google",
         icon="https://www.google.com.tw/favicon.ico",
         redirect_uri=REDIRECT_URI, #"http://localhost:8501",
-        scope=SCOPE #"openid email profile",
+        scope=SCOPE, #"openid email profile",
         key="google",
-        extras_params={"prompt": "consent"}#, "access_type": "offline"},
+        extras_params={"prompt": "consent"},#, "access_type": "offline"},
         use_container_width=True,
         pkce='S256',
     )
