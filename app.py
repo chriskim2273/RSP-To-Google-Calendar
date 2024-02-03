@@ -1,6 +1,7 @@
 import streamlit as st
 from streamlit_oauth import OAuth2Component
 import os
+import json
 
 # Load environment variables from .env file
 from dotenv import load_dotenv
@@ -28,6 +29,7 @@ if 'token' not in st.session_state:
         # If authorization successful, save token in session state
         st.session_state.token = result.get('token')
         #st.write(str(result.get('access_token',"")))
+        result = json.loads(result)
         st.write(result)
         st.write(result.get("access_token","JEOJJOEJOEEJO"))
         st.write(result.get("token", "mamama"))
