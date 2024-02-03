@@ -1,4 +1,5 @@
 import base64
+import csv
 import streamlit as st
 from streamlit_oauth import OAuth2Component
 import os
@@ -64,7 +65,10 @@ else:
     if uploaded_file:
         df = pd.read_csv(uploaded_file)
         st.dataframe(df)
-        st.data_editor(df)
+
+        spamreader = csv.reader(uploaded_file, delimiter=',')
+        for row in spamreader:
+            st.write(row)
         bytes_data = uploaded_file.read()
         st.write("Filename:", uploaded_file.name)
         st.write(bytes_data)
