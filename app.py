@@ -42,7 +42,7 @@ if "auth" not in st.session_state:
         payload += "=" * (-len(payload) % 4)
         # replace url-safe characters
         payload = payload.replace('-', '+').replace('_', '/')
-        payload = json.loads(base64.b64decode(payload))
+        payload = json.loads(base64.urlsafe_b64decode(payload))
         email = payload["email"]
         st.session_state["auth"] = email
         st.session_state["token"] = result["token"]
