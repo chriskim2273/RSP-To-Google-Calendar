@@ -170,21 +170,24 @@ if uploaded_file:
     #st.write(rows_to_cols)
     #for shift in all_shifts:
     #    st.write(shift)
+    st.session_state["shift_proccessed"] = True
+    st.rerun()
 
-show_df = st.toggle('Show DataFrame')
-show_shifts = st.toggle('Show Shifts In String Format')
+if st.session_state.get("shift_processed", False) == True:
+    show_df = st.toggle('Show DataFrame')
+    show_shifts = st.toggle('Show Shifts In String Format')
 
-if show_shifts:
-    for shift in all_shifts:
-        st.write(shift)
-if show_df:
-    st.dataframe(df)
+    if show_shifts:
+        for shift in all_shifts:
+            st.write(shift)
+    if show_df:
+        st.dataframe(df)
 
-worker_input = st.text_input(
-        "Please Enter Worker String (e.g. S12)",
-    )
-if worker_input:
-    st.write("hello " + str(worker_input))
+    worker_input = st.text_input(
+            "Please Enter Worker String (e.g. S12)",
+        )
+    if worker_input:
+        st.write("hello " + str(worker_input))
 
 def create_events():
     # Define the URL
