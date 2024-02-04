@@ -122,7 +122,7 @@ if uploaded_file:
                 rows_to_cols[j].append(item)
             #st.write(f"({str(i)},{str(j)}): {item}")
 
-    st.write(str(rows_to_cols))
+    #st.write(str(rows_to_cols))
 
     current_day = ""
     date = ""
@@ -168,7 +168,7 @@ if uploaded_file:
                 shift_workers = []
                 shift_detail = ""
             
-    st.write(rows_to_cols)
+    #st.write(rows_to_cols)
     for shift in all_shifts:
         st.write(shift)
 
