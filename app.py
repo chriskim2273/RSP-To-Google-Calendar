@@ -255,6 +255,8 @@ else:
                     shift_workers = "".join(split_text[1].split()) # remove whitespace
                     shift_workers = shift_workers.split(',')
 
+                st.write(shift_workers)
+
                 # Try to implement time change in shifts (specified afterwards)
 
                 time_change_pattern = r"^\[(\d{1,2}[APM]{2})-(\d{1,2}[APM]{2})\]$"
