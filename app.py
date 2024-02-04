@@ -34,14 +34,17 @@ SCOPE = os.environ.get('SCOPE')#,st.secrets["SCOPE"])
 def convert_to_military_time(time_str):
     time_str = time_str.strip()
     st.write(time_str)
-    hour = int(time_str[:-2])
+    time = time_str[:-2]
+    time_split = time.split(":")
+    hour = int(time_split[0])
+    minute = int(time_split[1]) if time_split[1] else 0
     meridian = time_str[-2:].upper()
 
     if hour == 12:
         hour = 0  # Special case: 12AM becomes 00
     if meridian == "PM":
         hour += 12
-    return hour
+    return hour, minute
 
 class Shift():
     def __init__(self, day_of_week, date, worker, start_time, end_time, location, shift_detail):
@@ -65,16 +68,16 @@ class Shift():
 
     def get_start_datetime(self):
         month, day = self.date.split("/")
-        start_hour = convert_to_military_time(self.start_time)
+        start_hour, start_minute = convert_to_military_time(self.start_time)
         #st.write(f"{self.start_time} -> {str(start_hour)}")
-        return datetime(datetime.now().year, int(month), int(day), start_hour, 0, 0)
+        return datetime(datetime.now().year, int(month), int(day), start_hour, start_minute, 0)
 
     def get_end_datetime(self):
         month, day = self.date.split("/")
         day = int(day)
         month = int(month)
         year = datetime.now().year
-        end_hour = convert_to_military_time(self.end_time)
+        end_hour, end_minute = convert_to_military_time(self.end_time)
         if self.end_time[-2:] == "AM" and self.start_time[-2:] == "PM":
             day += 1
             max_days = calendar.monthrange(datetime.now().year, month)[1]
@@ -87,7 +90,7 @@ class Shift():
                     year += 1
 
         #st.write(f"{self.end_time} -> {str(end_hour)}")
-        return datetime(year, month, day, end_hour, 0, 0)
+        return datetime(year, month, day, end_hour, end_minute, 0)
 
     def get_title(self):
         return f"RSP Shift ({self.worker}): {self.location} - {self.shift_detail}"
@@ -281,7 +284,7 @@ else:
                             content_inside_parentheses = match.group(1)
                             # Assuming we are fixing the start time...?
                             time_adjustment = content_inside_parentheses.strip()
-                            time_adjustment_mil = convert_to_military_time(time_adjustment)
+                            time_adjustment_mil, _min = convert_to_military_time(time_adjustment)
                             if time_adjustment_mil <= 12:
                                 time_adjustments[shift_worker] = (shift_start, time_adjustment)
                             else:
