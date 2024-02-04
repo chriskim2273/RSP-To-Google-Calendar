@@ -80,6 +80,7 @@ else:
 
 uploaded_file = st.file_uploader("Choose a CSV file", type='csv', key = "test")
 
+rows_to_cols = {}
 # Process the uploaded file
 if uploaded_file:
     df = pd.read_csv(uploaded_file)
@@ -89,7 +90,11 @@ if uploaded_file:
     for i, row in enumerate(nested_data):
         for j, item in enumerate(row):
             print(f"({str(i)},{str(j)}): {str(item)}")
+            if len(item) > 0:
+                rows_to_cols[j] = item
             st.write(f"({str(i)},{str(j)}): {str(item)}")
+    st.write(rows_to_cols)
+
 
 def create_events():
     # Define the URL
