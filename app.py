@@ -120,13 +120,13 @@ class Shift():
         month, day = self.date.split("/")
         start_hour = convert_to_military_time(self.start_time)
 
-        print(f"{self.start_time} -> {start_hour}")
+        print(f"{self.start_time} -> {str(start_hour)}")
         return datetime(datetime.now().year, int(month), int(day), start_hour, 0, 0, tzinfo=pytz.utc)
 
     def get_end_datetime(self):
         month, day = self.date.split("/")
         end_hour = convert_to_military_time(self.end_time)
-        print(f"{self.end_time} -> {end_time}")
+        print(f"{self.end_time} -> {str(end_time)}")
         return datetime(datetime.now().year, int(month), int(day), end_hour, 0, 0, tzinfo=pytz.utc)
 
     def get_title(self):
