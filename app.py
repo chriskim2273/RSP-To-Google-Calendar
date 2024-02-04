@@ -264,6 +264,7 @@ else:
                     all_shifts[-1].change_times(start_time, end_time)
                     shift_workers = []
                     shift_details = ""
+                    st.write(f'matched... {start_time}  ->  {end_time}' )
                     continue
 
                 if current_day and date and shift_workers and shift_detail and shift_start and shift_end and shift_location:
@@ -340,3 +341,10 @@ else:
                     st.success('All Shifts Uploaded Successfully!', icon="✅")
                 else:
                     st.error('Some shifts failed to upload...', icon="🚨")
+
+
+
+"""
+FIX: Dispatch: S15 (9PM)
+FIX THE ONES WITH DIFFETNT TIMES [X - Y] CORRECTION <- Isn't being uploaded.
+"""
