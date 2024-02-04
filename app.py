@@ -15,6 +15,7 @@ import re
 from icalendar import Calendar, Event, vCalAddress, vText
 import pytz
 from datetime import datetime
+import calendar
 
 # Load environment variables from .env file
 from dotenv import load_dotenv
@@ -70,12 +71,18 @@ class Shift():
     def get_end_datetime(self):
         month, day = self.date.split("/")
         day = int(day)
+        month = int(month)
         end_hour = convert_to_military_time(self.end_time)
         if self.end_time[-2:] == "AM" and self.start_time[-2:] == "PM":
             day += 1
+            max_days = calendar.monthrange(datetime.now().year, month)[1]
+            # Increment to next month
+            if day > max_days:
+                day = 1
+                month += 1
+
         #st.write(f"{self.end_time} -> {str(end_hour)}")
-        st.write(f"{month} - {day}")
-        return datetime(datetime.now().year, int(month), day, end_hour, 0, 0)
+        return datetime(datetime.now().year, month, day, end_hour, 0, 0)
 
     def get_title(self):
         return f"RSP: {self.location} - {self.shift_detail}"
