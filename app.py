@@ -149,7 +149,7 @@ if "token" not in st.session_state:
             payload_bytes = base64.urlsafe_b64decode(payload.encode('utf-8').replace('-', '+').replace('_', '/').decode('utf-8'))
         email = payload["email"]
         """
-        st.session_state["token"] = result["token"]
+        st.session_state["token"] = id_token
         st.rerun()
 else:
     st.write("You are logged in!")
@@ -282,8 +282,8 @@ else:
                             self_shift_count += 1
                 time.sleep(1)
                 progress_bar.empty()
-                st.balloons()
                 if self_shift_count == success_count:
+                    st.balloons()
                     st.success('This is a success message!', icon="✅")
                 else:
                     st.error('This is an error', icon="🚨")
