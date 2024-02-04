@@ -251,9 +251,17 @@ else:
                 if ':' in text and len(text.split(':')) == 2:
                     split_text = text.split(':')
                     shift_detail = "".join(split_text[0].split()) # remove whitepace
+
+                    parenthesis_pattern = re.compile(r'\(([^)]+)\)$') #Dispatch: S15 (9PM)
+                    match = parenthesis_pattern.search(split_text[1])
+                    if match:
+                        content_inside_parentheses = match.group(1)
+                        # Assuming we are fixing the start time...?
+                        shift_start = content_inside_parentheses.strip()
+                        split_text[1] = parenthesis_pattern.sub('', split_text[1])
                     shift_workers = "".join(split_text[1].split()) # remove whitespace
                     shift_workers = shift_workers.split(',')
-                    st.write(shift_workers)
+                    #st.write(shift_workers)
 
                 # Try to implement time change in shifts (specified afterwards)
 
@@ -263,7 +271,7 @@ else:
                 if match and all_shifts:
                     start_time, end_time = match.groups()
                     for i in range(len(shift_workers)):
-                        st.write(f'matched... {start_time}  ->  {end_time} : {str(all_shifts[-(i+1)])}' ) 
+                        #st.write(f'matched... {start_time}  ->  {end_time} : {str(all_shifts[-(i+1)])}' ) 
                         all_shifts[-(i+1)].change_times(start_time, end_time)
                     #shift_workers = []
                     shift_details = ""
@@ -353,6 +361,6 @@ else:
 
 
 """
-FIX: Dispatch: S15 (9PM)
+FIX: Dispatch: S15 (9PM) -> ASK JIN WHAT THE TIME IS...
 FIX THE ONES WITH DIFFETNT TIMES [X - Y] CORRECTION <- Isn't being uploaded.
 """
