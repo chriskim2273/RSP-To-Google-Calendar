@@ -102,6 +102,7 @@ def get_calendar_id():
                 return calendar.get('id')
         print(f"Calendar '{calendar_name}' not found.")
         st.write(f"Calendar '{calendar_name}' not found.")
+        st.write(f"Creating calendar '{calendar_name}'...")
         new_calendar = {
             'summary': calendar_name,  # Customize the calendar name
             'timeZone': 'America/New_York'
@@ -109,6 +110,7 @@ def get_calendar_id():
         create_response = requests.post(calendars_url, headers=headers, data=json.dumps(new_calendar))
         if create_response.status_code == 200:
             time.sleep(5)
+            st.write(f"Created calendar '{calendar_name}!")
             return create_response.json().get('id')
         else:
             print('Failed to create calendar:', create_response.content)
@@ -118,6 +120,7 @@ def get_calendar_id():
         print('Error retrieving calendar list:', response.content)
         st.write('Error retrieving calendar list:', response.content)
         return None
+
 
 def create_event_on_google_cal(shift, calendar_id):
     # Define the base URL for calendars
@@ -157,6 +160,7 @@ def create_event_on_google_cal(shift, calendar_id):
     else:
         print('Failed to create event:', response.content)
         st.write('Failed to create event:', response.content)
+        st.write('Failed event data: ', str(shift))
         return False
 
 if "token" not in st.session_state:
