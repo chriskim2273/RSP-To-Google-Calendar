@@ -171,7 +171,6 @@ if uploaded_file:
     #for shift in all_shifts:
     #    st.write(shift)
     st.session_state["shift_proccessed"] = True
-    st.rerun()
 
 if st.session_state.get("shift_processed", False) == True:
     show_df = st.toggle('Show DataFrame')
