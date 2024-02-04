@@ -109,10 +109,12 @@ def create_event_on_google_cal(shift):
 
     # Check the response
     if response.status_code == 200:
+        st.write("Event created successfully")
         print('Event created successfully')
         return True
     else:
         print('Failed to create event:', response.content)
+        st.write('Failed to create event:', response.content)
         return False
 
 if "token" not in st.session_state:
@@ -283,3 +285,5 @@ else:
                 st.balloons()
                 if self_shift_count == success_count:
                     st.success('This is a success message!', icon="✅")
+                else:
+                    st.error('This is an error', icon="🚨")
