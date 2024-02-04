@@ -119,7 +119,9 @@ if uploaded_file:
                 if j not in rows_to_cols:
                     rows_to_cols[j] = []
                 rows_to_cols[j].append(item)
-            st.write(f"({str(i)},{str(j)}): {item}")
+            #st.write(f"({str(i)},{str(j)}): {item}")
+
+    st.write(str(rows_to_cols))
 
     current_day = ""
     date = ""
