@@ -265,7 +265,7 @@ else:
                     for i in range(len(shift_workers)):
                         st.write(f'matched... {start_time}  ->  {end_time} : {str(all_shifts[-(i+1)])}' ) 
                         all_shifts[-(i+1)].change_times(start_time, end_time)
-                    shift_workers = []
+                    #shift_workers = []
                     shift_details = ""
                     #st.write(f'matched... {start_time}  ->  {end_time} : {str(all_shifts[-1])}' )
                     continue
@@ -274,7 +274,7 @@ else:
                     for shift_worker in shift_workers:
                         all_shifts.append(Shift(current_day, date, shift_worker, shift_start, shift_end, shift_location, shift_detail))
                     #print(f"[Shift: {current_day} - {date} : {shift_workers} > ({shift_start} - {shift_end}) > {shift_location} & {shift_detail}]")
-                    shift_workers = []
+                    #shift_workers = []
                     shift_detail = ""
                 
         #st.write(rows_to_cols)
