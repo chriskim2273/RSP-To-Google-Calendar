@@ -158,7 +158,7 @@ def create_event_on_google_cal(shift, calendar_id):
     # Check the response
     if response.status_code == 200:
         st.write("Event created successfully!")
-        print('Event created successfully!')
+        #print('Event created successfully!')
         return True
     else:
         print('Failed to create event:', response.content)
@@ -181,7 +181,7 @@ if "token" not in st.session_state:
     )
     
     if result:
-        st.write(result)
+        #st.write(result)
         # decode the id_token jwt and get the user's email address
         id_token = result["token"]["access_token"]
         """
@@ -201,8 +201,8 @@ if "token" not in st.session_state:
         st.session_state["token"] = id_token
         st.rerun()
 else:
-    st.write("You are logged in!")
-    st.write(st.session_state["token"])
+    st.write("You are logged in! Refresh to log out or log back in!")
+    #st.write(st.session_state["token"])
 
     uploaded_file = st.file_uploader("Choose a CSV file", type='csv', key = "test")
 
