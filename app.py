@@ -311,7 +311,7 @@ else:
                     user_shifts.append(shift)
 
             for shift_ in user_shifts:
-                print(shift_)
+                st.write(shift_)
             
             st.download_button(
             label="Download as .ics file",
