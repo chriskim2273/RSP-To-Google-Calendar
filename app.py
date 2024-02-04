@@ -80,13 +80,14 @@ else:
         del st.session_state["token"]
 
 class Shift():
-    def __init__(self, day_of_week, date, worker, start_time, end_time, location):
+    def __init__(self, day_of_week, date, worker, start_time, end_time, location, shift_detail):
         self.day_of_week = day_of_week
         self.date = date
         self.worker = worker
         self.start_time = start_time
         self.end_time = end_time
         self.location = location
+        self.shift_detail = shift_detail
 
     def change_times(self, start_time, end_time):
         self.start_time = start_time
