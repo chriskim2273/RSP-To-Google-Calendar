@@ -1,6 +1,7 @@
 import base64
 import csv
 from distutils.command.upload import upload
+import time
 from tracemalloc import start
 import streamlit as st
 from streamlit_oauth import OAuth2Component
@@ -247,7 +248,12 @@ if uploaded_file:
         )
         upload_shifts_to_gcal = st.button("Upload to Google Calendar")
         if upload_shifts_to_gcal:
-            st.write("Uploading!")
+            progress_text = "Uploading Shifts to Google Calendar..."
+            my_bar = st.progress(0, text=progress_text)
+
+            for percent_complete in range(100):
+                time.sleep(0.01)
+                my_bar.progress(percent_complete + 1, text=progress_text)
 
 
 def create_events():
