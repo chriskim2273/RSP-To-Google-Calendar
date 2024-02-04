@@ -33,7 +33,7 @@ SCOPE = os.environ.get('SCOPE')#,st.secrets["SCOPE"])
 
 def convert_to_military_time(time_str):
     time_str = time_str.strip()
-    st.write(time_str)
+    #st.write(time_str)
     time = time_str[:-2]
     time_split = time.split(":")
     hour = int(time_split[0])
@@ -354,6 +354,7 @@ else:
                     user_shifts.append(shift)
 
             st.write("Found Shifts (if Empty, invalid Worker String or no Shifts):")
+            st.write(f"Worker String Occurences in CSV: {df.to_string().count(worker_input)}")
             for shift_ in user_shifts:
                 st.write(shift_)
             
