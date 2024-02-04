@@ -91,7 +91,9 @@ if uploaded_file:
         for j, item in enumerate(row):
             print(f"({str(i)},{str(j)}): {str(item)}")
             if len(str(item)) > 0:
-                rows_to_cols[j] = item
+                if j not in rows_to_cols:
+                    rows_to_cols[j] = []
+                rows_to_cols[j].append(str(item))
             st.write(f"({str(i)},{str(j)}): {str(item)}")
     st.write(rows_to_cols)
 
