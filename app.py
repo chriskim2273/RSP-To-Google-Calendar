@@ -105,7 +105,6 @@ rows_to_cols = {}
 # Process the uploaded file
 if uploaded_file:
     df = pd.read_csv(uploaded_file)
-    st.dataframe(df)
 
     nested_data = df.values.tolist()
     for i, row in enumerate(nested_data):
@@ -169,10 +168,17 @@ if uploaded_file:
                 shift_detail = ""
             
     #st.write(rows_to_cols)
+    #for shift in all_shifts:
+    #    st.write(shift)
+
+show_df = st.toggle('Show DataFrame')
+show_shifts = st.toggle('Show Shifts In String Format')
+
+if show_shifts:
     for shift in all_shifts:
         st.write(shift)
-
-
+if show_df:
+    st.dataframe(df)
 
 def create_events():
     # Define the URL
