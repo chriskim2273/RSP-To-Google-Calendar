@@ -7,6 +7,7 @@ import json
 import requests
 from datetime import datetime
 import pandas as pd
+import re
 
 # Load environment variables from .env file
 from dotenv import load_dotenv
@@ -78,8 +79,27 @@ else:
     if logout:
         del st.session_state["token"]
 
+class Shift():
+    def __init__(self, day_of_week, date, worker, start_time, end_time, location):
+        self.day_of_week = day_of_week
+        self.date = date
+        self.worker = worker
+        self.start_time = start_time
+        self.end_time = end_time
+        self.location = location
+
+    def change_times(self, start_time, end_time):
+        self.start_time = start_time
+        self.end_time = end_time
+
+    def __str__(self):
+        return f"[Shift: {self.day_of_week} - {self.date} : {self.worker} > ({self.start_time} - {self.end_time}) > {self.location} & {self.shift_detail}]"
+
+
+
 uploaded_file = st.file_uploader("Choose a CSV file", type='csv', key = "test")
 
+DAYS_OF_WEEK = {"SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"}
 rows_to_cols = {}
 # Process the uploaded file
 if uploaded_file:
@@ -100,7 +120,68 @@ if uploaded_file:
                     rows_to_cols[j] = []
                 rows_to_cols[j].append(item)
             st.write(f"({str(i)},{str(j)}): {item}")
+
+    current_day = ""
+    date = ""
+    all_shifts = []
+    shift_workers = [] 
+    shift_detail = ""
+    shift_start = ""
+    shift_end = ""
+    shift_location = ""
+    for _ in rows_to_cols:
+        text = rows_to_cols[_]
+        if text.upper() in DAYS_OF_WEEK:
+            current_day = text
+        date_pattern = r"^\d{1,2}/\d{1,2}"
+        if re.match(date_pattern, text):
+            date = text
+        time_and_location_pattern = r"(\d{1,2}(?::\d{2})?(?:AM|PM)?)\s*-\s*(\d{1,2}(?::\d{2})?(?:AM|PM)?)\s*\((.*?)\)"
+        match = re.match(time_and_location_pattern, text)
+        if match:
+            start_time, end_time, shift_location = match.groups()
+        shift_time_pattern = r"\w+:\s\w+"
+        if re.match(shift_time_pattern, text):
+            split_text = text.split(':')
+            shift_detail = "".join(split_text[0].split()) # remove whitepace
+            shift_workers = "".join(split_text[1].split()) # remove whitespace
+            shift_workers = shift_workers.split(',')
+
+        # Try to implement time change in shifts (specified afterwards)
+        time_change_pattern = r'(\d{1,2}[APMapm]{2})-(\d{1,2}[APMapm]{2})'
+        match = re.match(time_change_pattern, text)
+        if match:
+            start_time, end_time = match.groups()
+            all_shifts[-1].change_times(start_time, end_time)
+            shift_workers = []
+            shift_details = ""
+            continue
+
+        if current_day and date and shift_workers and shift_detail and shift_start and shift_end and shift_location:
+            for shift_worker in shift_workers:
+                all_shifts.append(Shift(current_day, date, shift_worker, shift_start, shift_end, shift_location, shift_detail))
+            shift_workers = []
+            shift_detail = ""
+        
     st.write(rows_to_cols)
+    st.write(str(all_shifts))
+
+class Shift():
+    def __init__(self, day_of_week, date, worker, start_time, end_time, location, shift_detail):
+        self.day_of_week = day_of_week
+        self.date = date
+        self.worker = worker
+        self.start_time = start_time
+        self.end_time = end_time
+        self.location = location
+        self.shift_detail = shift_detail
+    
+    def change_times(self, start_time, end_time):
+        self.start_time = start_time
+        self.end_time = end_time
+
+    def __str__(self):
+        return f"[Shift: {self.day_of_week} - {self.date} : {self.worker} > ({self.start_time} - {self.end_time}) > {self.location} & {self.shift_detail}]"
 
 
 def create_events():
