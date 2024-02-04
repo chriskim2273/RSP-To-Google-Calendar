@@ -89,7 +89,7 @@ class Shift():
         return datetime(year, month, day, end_hour, 0, 0)
 
     def get_title(self):
-        return f"RSP: {self.location} - {self.shift_detail}"
+        return f"RSP Shift ({self.worker}): {self.location} - {self.shift_detail}"
 
     def __str__(self):
         return f"[Shift: {self.day_of_week} - {self.date} : {self.worker} > ({self.start_time} - {self.end_time}) > {self.location} & {self.shift_detail}]"
@@ -377,6 +377,6 @@ else:
 
 """
 FIX: Dispatch: S15 (9PM) -> ASK JIN WHAT THE TIME IS...
-FIX THE ONES WITH DIFFETNT TIMES [X - Y] CORRECTION <- Isn't being uploaded.
+FIX THE ONES WITH DIFFETNT TIMES [X - Y] CORRECTION <- Isn't being uploaded. (FIXED)
 ADD: FLAG TO CHANGE TITLE TO NOTIFY USER TO CHECK SHIFT...
 """
