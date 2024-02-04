@@ -94,6 +94,8 @@ if uploaded_file:
             if len(item) > 0:
                 if item == "nan":
                     continue
+                if item[0] == '[' and item[-1] == ']':
+                    j = j - 1
                 if j not in rows_to_cols:
                     rows_to_cols[j] = []
                 rows_to_cols[j].append(item)
