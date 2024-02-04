@@ -74,6 +74,7 @@ class Shift():
         if self.end_time[-2:] == "AM" and self.start_time[-2:] == "PM":
             day += 1
         #st.write(f"{self.end_time} -> {str(end_hour)}")
+        st.write(f"{month} - {day}")
         return datetime(datetime.now().year, int(month), day, end_hour, 0, 0)
 
     def get_title(self):
@@ -366,4 +367,5 @@ else:
 """
 FIX: Dispatch: S15 (9PM) -> ASK JIN WHAT THE TIME IS...
 FIX THE ONES WITH DIFFETNT TIMES [X - Y] CORRECTION <- Isn't being uploaded.
+ADD: FLAG TO CHANGE TITLE TO NOTIFY USER TO CHECK SHIFT...
 """
