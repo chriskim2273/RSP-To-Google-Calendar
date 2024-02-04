@@ -152,7 +152,7 @@ if uploaded_file:
             # Try to implement time change in shifts (specified afterwards)
             time_change_pattern = r"^\[(\d{1,2}[APM]{2})-(\d{1,2}[APM]{2})\]$"
             match = re.match(time_change_pattern, text)
-            if match:
+            if match and all_shifts:
                 start_time, end_time = match.groups()
                 all_shifts[-1].change_times(start_time, end_time)
                 shift_workers = []
