@@ -334,6 +334,7 @@ else:
                             self_shift_count += 1
                 time.sleep(1)
                 progress_bar.empty()
+                st.write(f"count: {self_shift_count} - success: {success_count}")
                 if self_shift_count == success_count:
                     st.balloons()
                     st.success('This is a success message!', icon="✅")
