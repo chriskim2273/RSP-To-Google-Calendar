@@ -1,6 +1,7 @@
 import base64
 import csv
 from distutils.command.upload import upload
+from tracemalloc import start
 import streamlit as st
 from streamlit_oauth import OAuth2Component
 import os
@@ -83,6 +84,17 @@ else:
     if logout:
         del st.session_state["token"]
 
+
+def convert_to_military_time(time_str):
+    hour = int(time_str[:-2])
+    meridian = time_str[-2:].upper()
+
+    if hour == 12:
+        hour = 0  # Special case: 12AM becomes 00
+    if meridian == "PM":
+        hour += 12
+    return hour
+
 class Shift():
     def __init__(self, day_of_week, date, worker, start_time, end_time, location, shift_detail):
         self.day_of_week = day_of_week
@@ -102,6 +114,19 @@ class Shift():
 
     def is_worker(self, worker):
         return self.worker == worker
+
+    def get_start_datetime(self):
+        month, day = self.date.split("/")
+        start_hour = convert_to_military_time(self.start_time)
+        return datetime(datetime.now().year, int(month), int(day), start_hour, 0, 0, tzinfo=pytz.utc)
+
+    def get_end_datetime(self):
+        month, day = self.date.split("/")
+        end_hour = convert_to_military_time(self.end_time)
+        return datetime(datetime.now().year, int(month), int(day), end_hour, 0, 0, tzinfo=pytz.utc)
+
+    def get_title(self):
+        return f"RSP: {self.location} - {self.shift_detail}"
 
     def __str__(self):
         return f"[Shift: {self.day_of_week} - {self.date} : {self.worker} > ({self.start_time} - {self.end_time}) > {self.location} & {self.shift_detail}]"
@@ -200,11 +225,21 @@ if uploaded_file:
     if worker_input and shifts_available:
         # Generate .ics file
         cal = Calendar()
+        for shift in all_shifts:
+            if shift.is_worker(worker_input):
+                event = Event()
+                event.add('summary', shift.get_title())
+                event.add('description', str(shift))
+                event.add('dtstart', shift.get_start_datetime())
+                event.add('dtend', shift.get_end_datetime())
+                event.add('dtstamp', datetime.now())
+                event['location'] = vText(shift.location)
+                cal.add_component(event)
         
         st.download_button(
-        label="Download .ics file",
-        data=df.to_csv().encode('utf-8'),
-        file_name='large_df.csv',
+        label="Download as .ics file",
+        data=cal.to_ical(),
+        file_name='RSP_SHIFT_DATA.ics',
         mime='text/ics',
         )
         upload_shifts_to_gcal = st.button("Upload to Google Calendar")
