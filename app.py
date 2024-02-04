@@ -269,7 +269,7 @@ else:
                     parenthesis_pattern = re.compile(r'\(([^)]+)\)$') #Dispatch: S15 (9PM)
                     match = parenthesis_pattern.search(split_text[1])
                     if match:
-                        st.write(match)
+                        ##st.write(match)
                         content_inside_parentheses = match.group(1)
                         # Assuming we are fixing the start time...?
                         shift_start = content_inside_parentheses.strip()
@@ -304,7 +304,7 @@ else:
         #for shift in all_shifts:
         #    st.write(shift)
         show_df = st.toggle('Show DataFrame')
-        show_shifts = st.toggle('Show Shifts In String Format')
+        show_shifts = st.toggle('Show All Shifts In String Format')
 
         if show_shifts:
             for shift in all_shifts:
@@ -336,6 +336,7 @@ else:
                     cal.add_component(event)
                     user_shifts.append(shift)
 
+            st.write("Found Shifts (if Empty, invalid Worker String or no Shifts):")
             for shift_ in user_shifts:
                 st.write(shift_)
             
@@ -377,6 +378,7 @@ else:
 
 """
 FIX: Dispatch: S15 (9PM) -> ASK JIN WHAT THE TIME IS...
+ASK: JIN what the different types are.
 FIX THE ONES WITH DIFFETNT TIMES [X - Y] CORRECTION <- Isn't being uploaded. (FIXED)
 ADD: FLAG TO CHANGE TITLE TO NOTIFY USER TO CHECK SHIFT...
 """
