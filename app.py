@@ -249,6 +249,8 @@ else:
         shift_detail = ""
         shift_start = ""
         shift_end = ""
+        time_adjustments = {
+        }
         son = ""
         for _ in rows_to_cols:
             for text in rows_to_cols[_]:
@@ -266,16 +268,24 @@ else:
                     shift_detail = "".join(split_text[0].split()) # remove whitepace
                     if shift_detail not in TYPES:
                         continue
-                    parenthesis_pattern = re.compile(r'\(([^)]+)\)$') #Dispatch: S15 (9PM)
-                    match = parenthesis_pattern.search(split_text[1])
-                    if match:
-                        ##st.write(match)
-                        content_inside_parentheses = match.group(1)
-                        # Assuming we are fixing the start time...?
-                        shift_start = content_inside_parentheses.strip()
-                        split_text[1] = parenthesis_pattern.sub('', split_text[1])
                     shift_workers = "".join(split_text[1].split()) # remove whitespace
                     shift_workers = shift_workers.split(',')
+
+                    # Handle Edge case of Time Adjustments
+                    parenthesis_pattern = re.compile(r'\(([^)]+)\)$') #Dispatch: S15 (9PM)
+                    for idx, shift_worker in enumerate(shift_workers):
+                        match = parenthesis_pattern.search(shift_worker)
+                        if match:
+                            ##st.write(match)
+                            content_inside_parentheses = match.group(1)
+                            # Assuming we are fixing the start time...?
+                            time_adjustment = content_inside_parentheses.strip()
+                            time_adjustment_mil = convert_to_military_time(time_adjustment)
+                            if time_adjustment_mil <= 12:
+                                time_adjustments[shift_worker] = (shift_start, time_adjustment)
+                            else:
+                                time_adjustments[shift_worker] = (time_adjustment, shift_end)
+                            shift_workers[idx] = parenthesis_pattern.sub('', shift_worker)
                     #st.write(shift_workers)
 
                 # Try to implement time change in shifts (specified afterwards)
@@ -295,7 +305,10 @@ else:
 
                 if current_day and date and shift_workers and shift_detail and shift_start and shift_end and shift_location:
                     for shift_worker in shift_workers:
-                        all_shifts.append(Shift(current_day, date, shift_worker, shift_start, shift_end, shift_location, shift_detail))
+                        if shift_worker in time_adjustments:
+                            all_shifts.append(Shift(current_day, date, shift_worker, time_adjustments[shift_worker][0], time_adjustments[shift_worker][1], shift_location, shift_detail))
+                        else:
+                            all_shifts.append(Shift(current_day, date, shift_worker, shift_start, shift_end, shift_location, shift_detail))
                     #print(f"[Shift: {current_day} - {date} : {shift_workers} > ({shift_start} - {shift_end}) > {shift_location} & {shift_detail}]")
                     #shift_workers = []
                     shift_detail = ""
