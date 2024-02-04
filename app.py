@@ -251,7 +251,7 @@ else:
                 if ':' in text and len(text.split(':')) == 2:
                     split_text = text.split(':')
                     shift_detail = "".join(split_text[0].split()) # remove whitepace
-                    shift_workers = split_text[1] # remove whitespace
+                    shift_workers = "".join(split_text[1].split()) # remove whitespace
                     shift_workers = shift_workers.split(',')
                     st.write(shift_workers)
 
