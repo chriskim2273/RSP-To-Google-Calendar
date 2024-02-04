@@ -331,7 +331,7 @@ else:
                             calendar_id = get_calendar_id()
                         success = create_event_on_google_cal(shift, calendar_id)
                         if success:
-                            self_shift_count += 1
+                            success_count += 1
                 time.sleep(1)
                 progress_bar.empty()
                 st.write(f"count: {self_shift_count} - success: {success_count}")
