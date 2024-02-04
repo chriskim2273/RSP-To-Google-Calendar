@@ -1,5 +1,6 @@
 import base64
 import csv
+from distutils.command.upload import upload
 import streamlit as st
 from streamlit_oauth import OAuth2Component
 import os
@@ -183,7 +184,15 @@ if uploaded_file:
             "Please Enter Worker String (e.g. S12)",
         )
     if worker_input:
-        st.write("hello " + str(worker_input))
+        st.download_button(
+        label="Download .ics file",
+        data=df.to_csv().encode('utf-8'),
+        file_name='large_df.csv',
+        mime='text/csv',
+        )
+        upload_shifts_to_gcal = st.button("Upload to Google Calendar")
+        if upload_shifts_to_gcal:
+            st.write("Uploading!")
 
 
 def create_events():
