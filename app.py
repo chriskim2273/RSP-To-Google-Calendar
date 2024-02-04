@@ -263,6 +263,7 @@ else:
                 if match and all_shifts:
                     start_time, end_time = match.groups()
                     for i in range(len(shift_workers)):
+                        st.write(f'matched... {start_time}  ->  {end_time} : {str(all_shifts[-(i+1)])}' ) 
                         all_shifts[-(i+1)].change_times(start_time, end_time)
                     shift_workers = []
                     shift_details = ""
