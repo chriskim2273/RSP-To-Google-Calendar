@@ -86,6 +86,7 @@ else:
 
 
 def convert_to_military_time(time_str):
+    time_str = time_str.strip()
     hour = int(time_str[:-2])
     meridian = time_str[-2:].upper()
 
@@ -118,11 +119,14 @@ class Shift():
     def get_start_datetime(self):
         month, day = self.date.split("/")
         start_hour = convert_to_military_time(self.start_time)
+
+        print(f"{self.start_time} -> {start_hour}")
         return datetime(datetime.now().year, int(month), int(day), start_hour, 0, 0, tzinfo=pytz.utc)
 
     def get_end_datetime(self):
         month, day = self.date.split("/")
         end_hour = convert_to_military_time(self.end_time)
+        print(f"{self.end_time} -> {end_time}")
         return datetime(datetime.now().year, int(month), int(day), end_hour, 0, 0, tzinfo=pytz.utc)
 
     def get_title(self):
@@ -165,7 +169,7 @@ if uploaded_file:
     shift_detail = ""
     shift_start = ""
     shift_end = ""
-    shift_location = ""
+    son = ""
     for _ in rows_to_cols:
         for text in rows_to_cols[_]:
             if text.upper() in DAYS_OF_WEEK:
@@ -198,7 +202,7 @@ if uploaded_file:
             if current_day and date and shift_workers and shift_detail and shift_start and shift_end and shift_location:
                 for shift_worker in shift_workers:
                     all_shifts.append(Shift(current_day, date, shift_worker, shift_start, shift_end, shift_location, shift_detail))
-                print(f"[Shift: {current_day} - {date} : {shift_workers} > ({shift_start} - {shift_end}) > {shift_location} & {shift_detail}]")
+                #print(f"[Shift: {current_day} - {date} : {shift_workers} > ({shift_start} - {shift_end}) > {shift_location} & {shift_detail}]")
                 shift_workers = []
                 shift_detail = ""
             
