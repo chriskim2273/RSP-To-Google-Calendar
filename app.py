@@ -110,7 +110,7 @@ if uploaded_file:
     nested_data = df.values.tolist()
     for i, row in enumerate(nested_data):
         for j, item in enumerate(row):
-            print(f"({str(i)},{str(j)}): {str(item)}")
+            #print(f"({str(i)},{str(j)}): {str(item)}")
             item = str(item)
             if len(item) > 0:
                 if item == "nan":
@@ -168,10 +168,11 @@ if uploaded_file:
                 shift_workers = []
                 shift_detail = ""
             
-        
     st.write(rows_to_cols)
-    st.write(str(all_shifts))
+    for shift in all_shifts:
+        st.write(shift)
 
+"""
 class Shift():
     def __init__(self, day_of_week, date, worker, start_time, end_time, location, shift_detail):
         self.day_of_week = day_of_week
@@ -189,6 +190,7 @@ class Shift():
     def __str__(self):
         return f"[Shift: {self.day_of_week} - {self.date} : {self.worker} > ({self.start_time} - {self.end_time}) > {self.location} & {self.shift_detail}]"
 
+"""
 
 def create_events():
     # Define the URL
