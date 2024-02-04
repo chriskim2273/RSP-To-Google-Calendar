@@ -147,7 +147,7 @@ def create_event_on_google_cal(shift, calendar_id):
             'timeZone': 'America/New_York',
         },
     }
-
+    st.write(event)
     # Send the POST request to add the event
     events_url = calendars_url + f'{calendar_id}/events'
     response = requests.post(events_url, headers=headers, data=json.dumps(event))
