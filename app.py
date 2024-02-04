@@ -151,7 +151,7 @@ if uploaded_file:
                 shift_workers = shift_workers.split(',')
 
             # Try to implement time change in shifts (specified afterwards)
-            """
+
             time_change_pattern = r"^\[(\d{1,2}[APM]{2})-(\d{1,2}[APM]{2})\]$"
             match = re.match(time_change_pattern, text)
             if match and all_shifts:
@@ -160,7 +160,7 @@ if uploaded_file:
                 shift_workers = []
                 shift_details = ""
                 continue
-            """
+
             if current_day and date and shift_workers and shift_detail and shift_start and shift_end and shift_location:
                 for shift_worker in shift_workers:
                     all_shifts.append(Shift(current_day, date, shift_worker, shift_start, shift_end, shift_location, shift_detail))
@@ -172,25 +172,7 @@ if uploaded_file:
     for shift in all_shifts:
         st.write(shift)
 
-"""
-class Shift():
-    def __init__(self, day_of_week, date, worker, start_time, end_time, location, shift_detail):
-        self.day_of_week = day_of_week
-        self.date = date
-        self.worker = worker
-        self.start_time = start_time
-        self.end_time = end_time
-        self.location = location
-        self.shift_detail = shift_detail
-    
-    def change_times(self, start_time, end_time):
-        self.start_time = start_time
-        self.end_time = end_time
 
-    def __str__(self):
-        return f"[Shift: {self.day_of_week} - {self.date} : {self.worker} > ({self.start_time} - {self.end_time}) > {self.location} & {self.shift_detail}]"
-
-"""
 
 def create_events():
     # Define the URL
