@@ -255,6 +255,7 @@ else:
                     parenthesis_pattern = re.compile(r'\(([^)]+)\)$') #Dispatch: S15 (9PM)
                     match = parenthesis_pattern.search(split_text[1])
                     if match:
+                        st.write(match)
                         content_inside_parentheses = match.group(1)
                         # Assuming we are fixing the start time...?
                         shift_start = content_inside_parentheses.strip()
