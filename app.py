@@ -180,6 +180,12 @@ if show_shifts:
 if show_df:
     st.dataframe(df)
 
+worker_input = st.text_input(
+        "Please Enter Worker String (e.g. S12)",
+    )
+if worker_input:
+    st.write("hello " + str(worker_input))
+
 def create_events():
     # Define the URL
     url = 'https://www.googleapis.com/calendar/v3/calendars/primary/events'
