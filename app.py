@@ -90,7 +90,7 @@ if uploaded_file:
     for i, row in enumerate(nested_data):
         for j, item in enumerate(row):
             print(f"({str(i)},{str(j)}): {str(item)}")
-            if len(item) > 0:
+            if len(str(item)) > 0:
                 rows_to_cols[j] = item
             st.write(f"({str(i)},{str(j)}): {str(item)}")
     st.write(rows_to_cols)
