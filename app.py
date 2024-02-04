@@ -1,4 +1,5 @@
 import base64
+from calendar import calendar
 import csv
 from distutils.command.upload import upload
 import time
@@ -78,10 +79,49 @@ class Shift():
     def __str__(self):
         return f"[Shift: {self.day_of_week} - {self.date} : {self.worker} > ({self.start_time} - {self.end_time}) > {self.location} & {self.shift_detail}]"
 
+def get_calendar_id():
+    calendar_name = "RSP Shifts"
+    # Define the base URL for calendar list
+    calendar_list_url = 'https://www.googleapis.com/calendar/v3/users/me/calendarList'
 
-def create_event_on_google_cal(shift):
-    # Define the URL
-    url = 'https://www.googleapis.com/calendar/v3/calendars/primary/events'
+    calendars_url = 'https://www.googleapis.com/calendar/v3/calendars/'
+
+    # Define the headers
+    headers = {
+        'Authorization': 'Bearer ' + str(st.session_state['token']),
+        'Accept': 'application/json',
+    }
+
+    # Send the GET request to retrieve calendar list
+    response = requests.get(calendar_list_url, headers=headers)
+
+    if response.status_code == 200:
+        calendars = response.json().get('items', [])
+        for calendar in calendars:
+            if calendar.get('summary') == calendar_name:
+                return calendar.get('id')
+        print(f"Calendar '{calendar_name}' not found.")
+        st.write(f"Calendar '{calendar_name}' not found.")
+        new_calendar = {
+            'summary': calendar_name,  # Customize the calendar name
+            'timeZone': 'America/New_York'
+        }
+        create_response = requests.post(calendars_url, headers=headers, data=json.dumps(new_calendar))
+        if create_response.status_code == 200:
+            time.sleep(5)
+            return create_response.json().get('id')
+        else:
+            print('Failed to create calendar:', create_response.content)
+            st.write('Failed to create calendar:', create_response.content)
+            return None
+    else:
+        print('Error retrieving calendar list:', response.content)
+        st.write('Error retrieving calendar list:', response.content)
+        return None
+
+def create_event_on_google_cal(shift, calendar_id):
+    # Define the base URL for calendars
+    calendars_url = 'https://www.googleapis.com/calendar/v3/calendars/'
 
     # Define the headers
     headers = {
@@ -89,6 +129,7 @@ def create_event_on_google_cal(shift):
         'Accept': 'application/json',
         'Content-Type': 'application/json'
     }
+
     # Define the event
     event = {
         'summary': shift.get_title(),
@@ -104,8 +145,9 @@ def create_event_on_google_cal(shift):
         },
     }
 
-    # Send the POST request
-    response = requests.post(url, headers=headers, data=json.dumps(event))
+    # Send the POST request to add the event
+    events_url = calendars_url + f'{calendar_id}/events'
+    response = requests.post(events_url, headers=headers, data=json.dumps(event))
 
     # Check the response
     if response.status_code == 200:
@@ -272,12 +314,15 @@ else:
                 progress_text = "Uploading Shifts to Google Calendar..."
                 progress_bar = st.progress(0, text=progress_text)
 
+                calendar_id = None
                 for num, shift in enumerate(all_shifts):
                     if shift.is_worker(worker_input):
                         time.sleep(2)
                         self_shift_count += 1
                         progress_bar.progress(int(((100/len(all_shifts)) * num) + 1), text=progress_text)
-                        success = create_event_on_google_cal(shift)
+                        if not calendar_id:
+                            calendar_id = get_calendar_id()
+                        success = create_event_on_google_cal(shift, calendar_id)
                         if success:
                             self_shift_count += 1
                 time.sleep(1)
