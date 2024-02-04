@@ -264,7 +264,7 @@ else:
                     all_shifts[-1].change_times(start_time, end_time)
                     shift_workers = []
                     shift_details = ""
-                    st.write(f'matched... {start_time}  ->  {end_time} : {str(all_shifts)}' )
+                    st.write(f'matched... {start_time}  ->  {end_time} : {str(all_shifts[-1])}' )
                     continue
 
                 if current_day and date and shift_workers and shift_detail and shift_start and shift_end and shift_location:
