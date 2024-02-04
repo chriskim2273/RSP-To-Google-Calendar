@@ -262,6 +262,9 @@ else:
             file_name='RSP_SHIFT_DATA.ics',
             mime='text/ics',
             )
+
+            success_count = 0
+            self_shift_count = 0
             upload_shifts_to_gcal = st.button("Upload to Google Calendar")
             if upload_shifts_to_gcal:
                 progress_text = "Uploading Shifts to Google Calendar..."
@@ -270,9 +273,13 @@ else:
                 for num, shift in enumerate(all_shifts):
                     if shift.is_worker(worker_input):
                         time.sleep(2)
-                        progress_bar.progress(((100/len(all_shifts)) * num) + 1, text=progress_text)
+                        self_shift_count += 1
+                        progress_bar.progress(int(((100/len(all_shifts)) * num) + 1), text=progress_text)
                         success = create_event_on_google_cal(shift)
+                        if success:
+                            self_shift_count += 1
                 time.sleep(1)
                 progress_bar.empty()
                 st.balloons()
-                st.success('This is a success message!', icon="✅")
+                if self_shift_count == success_count:
+                    st.success('This is a success message!', icon="✅")
