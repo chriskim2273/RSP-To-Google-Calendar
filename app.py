@@ -259,14 +259,14 @@ else:
 
                 time_change_pattern = r"^\[(\d{1,2}[APM]{2})-(\d{1,2}[APM]{2})\]$"
 
-                #match = re.match(time_change_pattern, text)
-                #if match and all_shifts:
-                #    start_time, end_time = match.groups()
-                #    all_shifts[-1].change_times(start_time, end_time)
-                #    shift_workers = []
-                #    shift_details = ""
-                #    #st.write(f'matched... {start_time}  ->  {end_time} : {str(all_shifts[-1])}' )
-                #    continue
+                match = re.match(time_change_pattern, text)
+                if match and all_shifts:
+                    start_time, end_time = match.groups()
+                    all_shifts[-1].change_times(start_time, end_time)
+                    shift_workers = []
+                    shift_details = ""
+                    #st.write(f'matched... {start_time}  ->  {end_time} : {str(all_shifts[-1])}' )
+                    continue
 
                 if current_day and date and shift_workers and shift_detail and shift_start and shift_end and shift_location:
                     for shift_worker in shift_workers:
