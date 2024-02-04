@@ -90,11 +90,14 @@ if uploaded_file:
     for i, row in enumerate(nested_data):
         for j, item in enumerate(row):
             print(f"({str(i)},{str(j)}): {str(item)}")
-            if len(str(item)) > 0:
+            item = str(item)
+            if len(item) > 0:
+                if item == "nan":
+                    continue
                 if j not in rows_to_cols:
                     rows_to_cols[j] = []
-                rows_to_cols[j].append(str(item))
-            st.write(f"({str(i)},{str(j)}): {str(item)}")
+                rows_to_cols[j].append(item)
+            st.write(f"({str(i)},{str(j)}): {item}")
     st.write(rows_to_cols)
 
 
