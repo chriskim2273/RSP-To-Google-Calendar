@@ -37,7 +37,7 @@ def convert_to_military_time(time_str):
     time = time_str[:-2]
     time_split = time.split(":")
     hour = int(time_split[0])
-    minute = int(time_split[1]) if time_split[1] else 0
+    minute = int(time_split[1]) if len(time_split) == 2 and time_split[1] else 0
     meridian = time_str[-2:].upper()
 
     if hour == 12:
