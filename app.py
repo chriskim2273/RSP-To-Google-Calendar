@@ -105,77 +105,71 @@ DAYS_OF_WEEK = {"SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SAT
 rows_to_cols = {}
 # Process the uploaded file
 if uploaded_file:
-    if st.session_state.get('file') != uploaded_file:
-        st.session_state['file'] = uploaded_file
-        df = pd.read_csv(uploaded_file)
+    df = pd.read_csv(uploaded_file)
 
-        nested_data = df.values.tolist()
-        for i, row in enumerate(nested_data):
-            for j, item in enumerate(row):
-                #print(f"({str(i)},{str(j)}): {str(item)}")
-                item = str(item)
-                if len(item) > 0:
-                    if item == "nan":
-                        continue
-                    if item[0] == '[' and item[-1] == ']':
-                        j = j - 1
-                    if j not in rows_to_cols:
-                        rows_to_cols[j] = []
-                    rows_to_cols[j].append(item)
-                #st.write(f"({str(i)},{str(j)}): {item}")
-
-        #st.write(str(rows_to_cols))
-
-        current_day = ""
-        date = ""
-        shift_workers = [] 
-        shift_detail = ""
-        shift_start = ""
-        shift_end = ""
-        shift_location = ""
-        for _ in rows_to_cols:
-            for text in rows_to_cols[_]:
-                if text.upper() in DAYS_OF_WEEK:
-                    current_day = text
-                date_pattern = r"^\d{1,2}/\d{1,2}"
-                if re.match(date_pattern, text):
-                    date = text
-                time_and_location_pattern = r"(\d{1,2}(?::\d{2})?(?:AM|PM)?)\s*-\s*(\d{1,2}(?::\d{2})?(?:AM|PM)?)\s*\((.*?)\)"
-                match = re.match(time_and_location_pattern, text)
-                if match:
-                    shift_start, shift_end, shift_location = match.groups()
-                shift_time_pattern = r"\w+:\s\w+"
-                if re.match(shift_time_pattern, text):
-                    split_text = text.split(':')
-                    shift_detail = "".join(split_text[0].split()) # remove whitepace
-                    shift_workers = "".join(split_text[1].split()) # remove whitespace
-                    shift_workers = shift_workers.split(',')
-
-                # Try to implement time change in shifts (specified afterwards)
-
-                time_change_pattern = r"^\[(\d{1,2}[APM]{2})-(\d{1,2}[APM]{2})\]$"
-                match = re.match(time_change_pattern, text)
-                if match and all_shifts:
-                    start_time, end_time = match.groups()
-                    all_shifts[-1].change_times(start_time, end_time)
-                    shift_workers = []
-                    shift_details = ""
+    nested_data = df.values.tolist()
+    for i, row in enumerate(nested_data):
+        for j, item in enumerate(row):
+            #print(f"({str(i)},{str(j)}): {str(item)}")
+            item = str(item)
+            if len(item) > 0:
+                if item == "nan":
                     continue
+                if item[0] == '[' and item[-1] == ']':
+                    j = j - 1
+                if j not in rows_to_cols:
+                    rows_to_cols[j] = []
+                rows_to_cols[j].append(item)
+            #st.write(f"({str(i)},{str(j)}): {item}")
 
-                if current_day and date and shift_workers and shift_detail and shift_start and shift_end and shift_location:
-                    for shift_worker in shift_workers:
-                        all_shifts.append(Shift(current_day, date, shift_worker, shift_start, shift_end, shift_location, shift_detail))
-                    print(f"[Shift: {current_day} - {date} : {shift_workers} > ({shift_start} - {shift_end}) > {shift_location} & {shift_detail}]")
-                    shift_workers = []
-                    shift_detail = ""
-                
-        #st.write(rows_to_cols)
-        #for shift in all_shifts:
-        #    st.write(shift)
-        st.session_state["shift_proccessed"] = True
-        st.rerun()
+    #st.write(str(rows_to_cols))
 
-if st.session_state.get("shift_processed", False) == True:
+    current_day = ""
+    date = ""
+    shift_workers = [] 
+    shift_detail = ""
+    shift_start = ""
+    shift_end = ""
+    shift_location = ""
+    for _ in rows_to_cols:
+        for text in rows_to_cols[_]:
+            if text.upper() in DAYS_OF_WEEK:
+                current_day = text
+            date_pattern = r"^\d{1,2}/\d{1,2}"
+            if re.match(date_pattern, text):
+                date = text
+            time_and_location_pattern = r"(\d{1,2}(?::\d{2})?(?:AM|PM)?)\s*-\s*(\d{1,2}(?::\d{2})?(?:AM|PM)?)\s*\((.*?)\)"
+            match = re.match(time_and_location_pattern, text)
+            if match:
+                shift_start, shift_end, shift_location = match.groups()
+            shift_time_pattern = r"\w+:\s\w+"
+            if re.match(shift_time_pattern, text):
+                split_text = text.split(':')
+                shift_detail = "".join(split_text[0].split()) # remove whitepace
+                shift_workers = "".join(split_text[1].split()) # remove whitespace
+                shift_workers = shift_workers.split(',')
+
+            # Try to implement time change in shifts (specified afterwards)
+
+            time_change_pattern = r"^\[(\d{1,2}[APM]{2})-(\d{1,2}[APM]{2})\]$"
+            match = re.match(time_change_pattern, text)
+            if match and all_shifts:
+                start_time, end_time = match.groups()
+                all_shifts[-1].change_times(start_time, end_time)
+                shift_workers = []
+                shift_details = ""
+                continue
+
+            if current_day and date and shift_workers and shift_detail and shift_start and shift_end and shift_location:
+                for shift_worker in shift_workers:
+                    all_shifts.append(Shift(current_day, date, shift_worker, shift_start, shift_end, shift_location, shift_detail))
+                print(f"[Shift: {current_day} - {date} : {shift_workers} > ({shift_start} - {shift_end}) > {shift_location} & {shift_detail}]")
+                shift_workers = []
+                shift_detail = ""
+            
+    #st.write(rows_to_cols)
+    #for shift in all_shifts:
+    #    st.write(shift)
     show_df = st.toggle('Show DataFrame')
     show_shifts = st.toggle('Show Shifts In String Format')
 
@@ -190,6 +184,7 @@ if st.session_state.get("shift_processed", False) == True:
         )
     if worker_input:
         st.write("hello " + str(worker_input))
+
 
 def create_events():
     # Define the URL
