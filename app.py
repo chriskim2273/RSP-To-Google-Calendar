@@ -208,6 +208,7 @@ else:
 
     all_shifts = []
     DAYS_OF_WEEK = {"SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"}
+    TYPES = {"Dispatch", "E/A", "E/SUP","Codispatch", "Field"}
     rows_to_cols = {}
     # Process the uploaded file
     if uploaded_file:
@@ -251,7 +252,8 @@ else:
                 if ':' in text and len(text.split(':')) == 2:
                     split_text = text.split(':')
                     shift_detail = "".join(split_text[0].split()) # remove whitepace
-
+                    if shift_detail not in TYPES:
+                        continue
                     parenthesis_pattern = re.compile(r'\(([^)]+)\)$') #Dispatch: S15 (9PM)
                     match = parenthesis_pattern.search(split_text[1])
                     if match:
