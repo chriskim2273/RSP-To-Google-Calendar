@@ -100,6 +100,7 @@ class Shift():
 
 uploaded_file = st.file_uploader("Choose a CSV file", type='csv', key = "test")
 
+all_shifts = []
 DAYS_OF_WEEK = {"SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"}
 rows_to_cols = {}
 # Process the uploaded file
@@ -125,7 +126,6 @@ if uploaded_file:
 
     current_day = ""
     date = ""
-    all_shifts = []
     shift_workers = [] 
     shift_detail = ""
     shift_start = ""
