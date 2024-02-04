@@ -264,7 +264,7 @@ else:
                     all_shifts[-1].change_times(start_time, end_time)
                     shift_workers = []
                     shift_details = ""
-                    st.write(f'matched... {start_time}  ->  {end_time} : {str(all_shifts[-1])}' )
+                    #st.write(f'matched... {start_time}  ->  {end_time} : {str(all_shifts[-1])}' )
                     continue
 
                 if current_day and date and shift_workers and shift_detail and shift_start and shift_end and shift_location:
@@ -297,6 +297,7 @@ else:
         if worker_input and shifts_available:
             # Generate .ics file
             cal = Calendar()
+            user_shifts = []
             for shift in all_shifts:
                 if shift.is_worker(worker_input):
                     event = Event()
@@ -307,6 +308,10 @@ else:
                     event.add('dtstamp', datetime.now())
                     event['location'] = vText(shift.location)
                     cal.add_component(event)
+                    user_shifts.append(shift)
+
+            for shift_ in user_shifts:
+                print(shift_)
             
             st.download_button(
             label="Download as .ics file",
