@@ -164,6 +164,8 @@ if uploaded_file:
                     all_shifts.append(Shift(current_day, date, shift_worker, shift_start, shift_end, shift_location, shift_detail))
                 shift_workers = []
                 shift_detail = ""
+            
+            print(f"[Shift: {current_day} - {date} : {shift_workers} > ({start_time} - {end_time}) > {shift_location} & {shift_detail}]")
         
     st.write(rows_to_cols)
     st.write(str(all_shifts))
