@@ -9,6 +9,9 @@ import requests
 from datetime import datetime
 import pandas as pd
 import re
+from icalendar import Calendar, Event, vCalAddress, vText
+import pytz
+from datetime import datetime
 
 # Load environment variables from .env file
 from dotenv import load_dotenv
@@ -93,6 +96,12 @@ class Shift():
     def change_times(self, start_time, end_time):
         self.start_time = start_time
         self.end_time = end_time
+
+    def get_worker(self):
+        return self.worker
+
+    def is_worker(self, worker):
+        return self.worker == worker
 
     def __str__(self):
         return f"[Shift: {self.day_of_week} - {self.date} : {self.worker} > ({self.start_time} - {self.end_time}) > {self.location} & {self.shift_detail}]"
@@ -183,12 +192,20 @@ if uploaded_file:
     worker_input = st.text_input(
             "Please Enter Worker String (e.g. S12)",
         )
-    if worker_input:
+    shifts_available = False
+    for shift in all_shifts:
+        if shift.is_worker(worker_input):
+            shifts_available = True
+            break
+    if worker_input and shifts_available:
+        # Generate .ics file
+        cal = Calendar()
+        
         st.download_button(
         label="Download .ics file",
         data=df.to_csv().encode('utf-8'),
         file_name='large_df.csv',
-        mime='text/csv',
+        mime='text/ics',
         )
         upload_shifts_to_gcal = st.button("Upload to Google Calendar")
         if upload_shifts_to_gcal:

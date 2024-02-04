@@ -1,1 +1,2 @@
 streamlit-oauth==0.1.7
+icalendar==5.0.11
