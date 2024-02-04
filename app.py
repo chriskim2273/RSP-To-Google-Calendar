@@ -141,7 +141,7 @@ if uploaded_file:
             time_and_location_pattern = r"(\d{1,2}(?::\d{2})?(?:AM|PM)?)\s*-\s*(\d{1,2}(?::\d{2})?(?:AM|PM)?)\s*\((.*?)\)"
             match = re.match(time_and_location_pattern, text)
             if match:
-                start_time, end_time, shift_location = match.groups()
+                shift_start, shift_end, shift_location = match.groups()
             shift_time_pattern = r"\w+:\s\w+"
             if re.match(shift_time_pattern, text):
                 split_text = text.split(':')
