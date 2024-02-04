@@ -72,6 +72,7 @@ class Shift():
         month, day = self.date.split("/")
         day = int(day)
         month = int(month)
+        year = datetime.now().year
         end_hour = convert_to_military_time(self.end_time)
         if self.end_time[-2:] == "AM" and self.start_time[-2:] == "PM":
             day += 1
@@ -80,9 +81,12 @@ class Shift():
             if day > max_days:
                 day = 1
                 month += 1
+                if month > 12:
+                    month = 1
+                    year += 1
 
         #st.write(f"{self.end_time} -> {str(end_hour)}")
-        return datetime(datetime.now().year, month, day, end_hour, 0, 0)
+        return datetime(year, month, day, end_hour, 0, 0)
 
     def get_title(self):
         return f"RSP: {self.location} - {self.shift_detail}"
