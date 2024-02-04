@@ -65,7 +65,7 @@ class Shift():
         month, day = self.date.split("/")
         start_hour = convert_to_military_time(self.start_time)
         #st.write(f"{self.start_time} -> {str(start_hour)}")
-        return datetime(datetime.now().year, int(month), int(day), start_hour, 0, 0, tzinfo=pytz.timezone('America/New_York'))
+        return datetime(datetime.now().year, int(month), int(day), start_hour, 0, 0)
 
     def get_end_datetime(self):
         month, day = self.date.split("/")
@@ -74,7 +74,7 @@ class Shift():
         if self.end_time[-2:] == "AM" and self.start_time[-2:] == "PM":
             day += 1
         #st.write(f"{self.end_time} -> {str(end_hour)}")
-        return datetime(datetime.now().year, int(month), day, end_hour, 0, 0, tzinfo=pytz.timezone('America/New_York'))
+        return datetime(datetime.now().year, int(month), day, end_hour, 0, 0)
 
     def get_title(self):
         return f"RSP: {self.location} - {self.shift_detail}"
@@ -150,15 +150,15 @@ def create_event_on_google_cal(shift, calendar_id):
             'timeZone': 'America/New_York',
         },
     }
-    st.write(event)
+    #st.write(event)
     # Send the POST request to add the event
     events_url = calendars_url + f'{calendar_id}/events'
     response = requests.post(events_url, headers=headers, data=json.dumps(event))
 
     # Check the response
     if response.status_code == 200:
-        st.write("Event created successfully")
-        print('Event created successfully')
+        st.write("Event created successfully!")
+        print('Event created successfully!')
         return True
     else:
         print('Failed to create event:', response.content)
@@ -334,9 +334,9 @@ else:
                             success_count += 1
                 time.sleep(1)
                 progress_bar.empty()
-                st.write(f"count: {self_shift_count} - success: {success_count}")
+                #st.write(f"count: {self_shift_count} - success: {success_count}")
                 if self_shift_count == success_count:
                     st.balloons()
-                    st.success('This is a success message!', icon="✅")
+                    st.success('All Shifts Uploaded Successfully!', icon="✅")
                 else:
-                    st.error('This is an error', icon="🚨")
+                    st.error('Some shifts failed to upload...', icon="🚨")
