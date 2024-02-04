@@ -33,6 +33,7 @@ SCOPE = os.environ.get('SCOPE')#,st.secrets["SCOPE"])
 
 def convert_to_military_time(time_str):
     time_str = time_str.strip()
+    st.write(time_str)
     hour = int(time_str[:-2])
     meridian = time_str[-2:].upper()
 
