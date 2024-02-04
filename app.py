@@ -248,7 +248,7 @@ else:
                 match = re.match(time_and_location_pattern, text)
                 if match:
                     shift_start, shift_end, shift_location = match.groups()
-                shift_time_pattern = r"\w+:\s\w+"
+                shift_time_pattern = r'(\w+):(\w+)'
                 if re.match(shift_time_pattern, text):
                     split_text = text.split(':')
                     shift_detail = "".join(split_text[0].split()) # remove whitepace
