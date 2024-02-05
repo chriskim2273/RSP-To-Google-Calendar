@@ -289,10 +289,11 @@ else:
                             # Assuming we are fixing the start time...?
                             time_adjustment = content_inside_parentheses.strip()
                             time_adjustment_mil, _min = convert_to_military_time(time_adjustment)
+                            extracted_worker = "".join(parenthesis_pattern.sub('', shift_worker).split())
                             if time_adjustment_mil <= 12:
-                                time_adjustments[shift_worker] = (shift_start, time_adjustment)
+                                time_adjustments[extracted_worker] = (shift_start, time_adjustment)
                             else:
-                                time_adjustments[shift_worker] = (time_adjustment, shift_end)
+                                time_adjustments[extracted_worker] = (time_adjustment, shift_end)
                             shift_workers[idx] = parenthesis_pattern.sub('', shift_worker)
                         shift_workers[idx] = "".join(shift_worker.split())
                     st.write(time_adjustments)
