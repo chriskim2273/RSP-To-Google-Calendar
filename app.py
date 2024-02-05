@@ -297,6 +297,7 @@ else:
                             else:
                                 time_adjustments[shift_worker] = (time_adjustment, shift_end)
                             st.write(time_adjustments)
+                            time_adjustments = {}
                     #st.write(shift_workers)
 
                 # Try to implement time change in shifts (specified afterwards)
