@@ -263,79 +263,93 @@ else:
         for _ in rows_to_cols:
             for text in rows_to_cols[_]:
                 try:
+
+                    # Extract Day of Week
                     if text.upper() in DAYS_OF_WEEK:
                         current_day = text
+                    
+                    # Extract Date (e.g. 1/23)
                     date_pattern = r"^\d{1,2}/\d{1,2}"
                     if re.match(date_pattern, text):
                         date = text
+
+                    # Extract time and location data from cell (e.g. 12PM-4PM (HQ))
                     time_and_location_pattern = r"(\d{1,2}(?::\d{2})?(?:AM|PM)?)\s*-\s*(\d{1,2}(?::\d{2})?(?:AM|PM)?)\s*\((.*?)\)"
                     match = re.match(time_and_location_pattern, text)
                     if match:
                         shift_start, shift_end, shift_location = match.groups()
+
+                    # Extract Shift Type and Who's Working (e.g. "Dispatch: S2, S11")
                     if ':' in text and len(text.split(':')) == 2:
+                        # Split String into two parts (Shift Type & Workers)
                         split_text = text.split(':')
-                        shift_detail = "".join(split_text[0].split()) # remove whitepace
+                        shift_detail = "".join(split_text[0].split()) # remove whitepace from shift type
+                        # Check if matched string is even a shift listing
                         if shift_detail not in TYPES:
                             continue
-                        shift_workers = split_text[1]#"".join(split_text[1].split()) # remove whitespace
-                        shift_workers = shift_workers.split(',')
 
-                        # Handle Edge case of Time Adjustments Within Parenthesis
+                        shift_workers = split_text[1]#"".join(split_text[1].split()) # remove whitespace
+                        shift_workers = shift_workers.split(',') # Separate different worker strings
+
+                        # Handle Edge case of Time Adjustments Within Parenthesis (REGEX)
                         parenthesis_pattern = re.compile(r'\(([^)]+)\)$') #Dispatch: S15 (9PM)
+                        
+                        # Iterate through worker strings
                         for idx, shift_worker in enumerate(shift_workers):
-                            match = parenthesis_pattern.search(shift_worker)
+                            match = parenthesis_pattern.search(shift_worker) # check for time adjustment
                             if match:
-                                ##st.write(match)
-                                content_inside_parentheses = match.group(1)
-                                #st.write(content_inside_parentheses)
+                                content_inside_parentheses = match.group(1) # Get stirng inside parenthesis
+                                
+                                # Check if the time adjustment is both start and end time
                                 multi_time_pattern = re.compile(r"\s*(\d{1,2}[APap][Mm])\s*-\s*(\d{1,2}[APap][Mm])")
                                 multi_time_match = multi_time_pattern.search(content_inside_parentheses)
-                                extracted_worker = "".join(parenthesis_pattern.sub('', shift_worker).split())
+                                extracted_worker = "".join(parenthesis_pattern.sub('', shift_worker).split()) # Remove any whitespace
+                                
+                                # If it is a multi-time adjustment, extract each time string, remove whitespace, and add to time_adjustments table for later.
                                 if multi_time_match:
                                     start_adjustment = "".join(multi_time_match.group(1).split())
                                     end_adjustment = "".join(multi_time_match.group(2).split())
                                     time_adjustments[extracted_worker] = (start_adjustment, end_adjustment)
-                                    #st.write(time_adjustments)
-                                else:
-                                    single_time_pattern = re.compile(r"^\s*(1[0-2]|[1-9])\s*[APap][Mm]$")
+                                else: # If not multi-time, check if it is a single time adjustment.
+                                    single_time_pattern = re.compile(r"^\s*(1[0-2]|[1-9])\s*[APap][Mm]$") # REGEX for single time (e.g. "9AM")
                                     single_time_match = single_time_pattern.search(content_inside_parentheses)
                                     if single_time_match:
-                                        # Assuming we are fixing the start time...?
                                         time_adjustment = "".join(content_inside_parentheses.split())
-                                        time_adjustment_mil, _min = convert_to_military_time(time_adjustment)
-                                        #st.write(extracted_worker)
+                                        time_adjustment_mil, _min = convert_to_military_time(time_adjustment) # Convert to military time to compare
+                                        # If the time adjustment is before 12 -> (AM) then we assume the end time is being changed. Else, start time.
                                         if time_adjustment_mil <= 12:
                                             time_adjustments[extracted_worker] = (shift_start, time_adjustment)
                                         else:
                                             time_adjustments[extracted_worker] = (time_adjustment, shift_end)
-                                shift_workers[idx] = extracted_worker
-                            shift_workers[idx] = "".join(shift_workers[idx].split())
+                                shift_workers[idx] = extracted_worker # Replace worker string with cleaned string
+                            shift_workers[idx] = "".join(shift_workers[idx].split()) # Remove whitespace
                         #st.write(time_adjustments)
                         #st.write(shift_workers)
 
-                    # Try to implement time change in shifts (specified afterwards)
+                    # Try to implement time change in shifts (specified afterwards, e.g. "[8PM-4AM]")
                     time_change_pattern = r"^\[(\d{1,2}[APM]{2})-(\d{1,2}[APM]{2})\]$"
                     #time_change_pattern = r"^\[\s*(\d{1,2}[APM]{2})\s*-\s*(\d{1,2}[APM]{2})\s*\]$"
                     test_string = "".join(text.split()) 
                     match = re.match(time_change_pattern, test_string)
+                    # If there is a match to the REGEX, and shifts exist
                     if match and all_shifts:
-                        start_time, end_time = match.groups()
-                        for i in range(len(shift_workers)):
-                            #st.write(f'matched... {start_time}  ->  {end_time} : {str(all_shifts[-(i+1)])}' ) 
+                        start_time, end_time = match.groups() # Extract time strings
+
+                        # For the last shifts created, change all their times 
+                        for i in range(len(shift_workers)): 
                             all_shifts[-(i+1)].change_times(start_time, end_time)
-                        #shift_workers = []
                         shift_details = ""
-                        #st.write(f'matched... {start_time}  ->  {end_time} : {str(all_shifts[-1])}' )
                         continue
 
+                    # If we have all the information for a shift required, create Shift Object.
                     if current_day and date and shift_workers and shift_detail and shift_start and shift_end and shift_location:
+                        # If the shift detail is not in TYPES, then it's most likely invalid or a hidden shift.
                         if shift_detail not in TYPES:
                             continue
                         for shift_worker in shift_workers:
+                            # If there was a time_adjustment found for a specific shift, change.
                             if shift_worker in time_adjustments:
-                                #st.write(time_adjustments[shift_worker])
                                 all_shifts.append(Shift(current_day, date, shift_worker, time_adjustments[shift_worker][0], time_adjustments[shift_worker][1], shift_location, shift_detail))
-                                #st.write(all_shifts[-1])
                                 del time_adjustments[shift_worker]
                             else:
                                 all_shifts.append(Shift(current_day, date, shift_worker, shift_start, shift_end, shift_location, shift_detail))
