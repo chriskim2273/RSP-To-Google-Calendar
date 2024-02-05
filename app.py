@@ -435,9 +435,9 @@ else:
 
 
 
-"""
-FIX: Dispatch: S15 (9PM) -> ASK JIN WHAT THE TIME IS...
-ASK: JIN what the different types are.
-FIX THE ONES WITH DIFFETNT TIMES [X - Y] CORRECTION <- Isn't being uploaded. (FIXED)
-ADD: FLAG TO CHANGE TITLE TO NOTIFY USER TO CHECK SHIFT...
-"""
+#"""
+#FIX: Dispatch: S15 (9PM) -> ASK JIN WHAT THE TIME IS...
+#ASK: JIN what the different types are.
+#FIX THE ONES WITH DIFFETNT TIMES [X - Y] CORRECTION <- Isn't being uploaded. (FIXED)
+#ADD: FLAG TO CHANGE TITLE TO NOTIFY USER TO CHECK SHIFT...
+#"""
