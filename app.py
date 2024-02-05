@@ -319,6 +319,7 @@ else:
                         continue
                     for shift_worker in shift_workers:
                         if shift_worker in time_adjustments:
+                            st.write(time_adjustments[shift_worker])
                             all_shifts.append(Shift(current_day, date, shift_worker, time_adjustments[shift_worker][0], time_adjustments[shift_worker][1], shift_location, shift_detail))
                             del time_adjustments[shift_worker]
                         else:
