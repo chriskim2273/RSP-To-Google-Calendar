@@ -88,7 +88,7 @@ class Shift():
                 if month > 12:
                     month = 1
                     year += 1
-        st.write(f"{self.end_time} - {year} - {month} - {day}")
+        st.write(f"{self.end_time[-2:]} - {self.start_time[-2:]} - {self.end_time} - {year} - {month} - {day}")
         #st.write(f"{self.end_time} -> {str(end_hour)}")
         return datetime(year, month, day, end_hour, end_minute, 0)
 
