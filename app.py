@@ -287,7 +287,7 @@ else:
                             ##st.write(match)
                             content_inside_parentheses = match.group(1)
                             # Assuming we are fixing the start time...?
-                            time_adjustment = content_inside_parentheses.strip()
+                            time_adjustment = "".join(content_inside_parentheses.split())
                             time_adjustment_mil, _min = convert_to_military_time(time_adjustment)
                             extracted_worker = "".join(parenthesis_pattern.sub('', shift_worker).split())
                             if time_adjustment_mil <= 12:
