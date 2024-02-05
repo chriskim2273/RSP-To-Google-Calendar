@@ -286,7 +286,8 @@ else:
                         if match:
                             ##st.write(match)
                             content_inside_parentheses = match.group(1)
-                            multi_time_pattern = re.compile(r'\s*(\d{1,2}[APap][Mm])\s*-\s*(\d{1,2}[APap][Mm])')
+                            st.write(content_inside_parentheses)
+                            multi_time_pattern = re.compile(r"\s*(\d{1,2}[APap][Mm])\s*-\s*(\d{1,2}[APap][Mm])")
                             multi_time_match = multi_time_pattern.search(content_inside_parentheses)
                             extracted_worker = "".join(parenthesis_pattern.sub('', shift_worker).split())
                             if multi_time_match:
