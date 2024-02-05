@@ -362,6 +362,10 @@ else:
             st.write("Shifts To Exclude Selected:")
             for shift in options:
                 st.write(shift)
+            st.write("Remaining Shifts (To be added):")
+            for shift in user_shifts:
+                if shift not in options:
+                    st.write(shift)
             st.divider()
             cal = Calendar()
             for shift in user_shifts:
