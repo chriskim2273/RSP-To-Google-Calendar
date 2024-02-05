@@ -373,15 +373,15 @@ else:
                 st.write("Shifts To Exclude Selected:")
                 for shift in options:
                     st.write(shift)
-                st.write("Remaining Shifts (To be added):")
-                # Tried adding __eq__ method and stuff but nothing was working...
-                for shift in user_shifts:
-                    shift_match = False
-                    for shift_ in options:
-                        if str(shift) == str(shift_):
-                            shift_match = True
-                    if not shift_match:
-                        st.write(shift)
+            st.write("Shifts To Be Added:")
+            # Tried adding __eq__ method and stuff but nothing was working...
+            for shift in user_shifts:
+                shift_match = False
+                for shift_ in options:
+                    if str(shift) == str(shift_):
+                        shift_match = True
+                if not shift_match:
+                    st.write(shift)
             st.divider()
             cal = Calendar()
             for shift in user_shifts:
