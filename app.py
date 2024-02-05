@@ -341,25 +341,32 @@ else:
                 break
         if worker_input and shifts_available:
             # Generate .ics file
-            cal = Calendar()
             user_shifts = []
             for shift in all_shifts:
                 if shift.is_worker(worker_input):
-                    event = Event()
-                    event.add('summary', shift.get_title())
-                    event.add('description', str(shift))
-                    event.add('dtstart', shift.get_start_datetime())
-                    event.add('dtend', shift.get_end_datetime())
-                    event.add('dtstamp', datetime.now())
-                    event['location'] = vText(shift.location)
-                    cal.add_component(event)
                     user_shifts.append(shift)
 
-            st.write("Found Shifts (if Empty, invalid Worker String or no Shifts):")
             st.write(f"Worker String Occurences in CSV: {df.to_string().count(worker_input)}")
-            for shift_ in user_shifts:
-                st.write(shift_)
+            st.write(f"Amount of Shifts Found and Processed: {len(user_shifts)}")
+            st.write("Please make sure the two values match. (If not, it could indicate a disconnect)")
+            options = st.multiselect(
+                "Found Shifts (if Empty, invalid Worker String or no Shifts):",
+                user_shifts,
+                user_shifts)
+
+            st.write('You selected:', options)
             
+            cal = Calendar()
+            for selected in options:
+                event = Event()
+                event.add('summary', shift.get_title())
+                event.add('description', str(shift))
+                event.add('dtstart', shift.get_start_datetime())
+                event.add('dtend', shift.get_end_datetime())
+                event.add('dtstamp', datetime.now())
+                event['location'] = vText(shift.location)
+                cal.add_component(event)
+
             st.download_button(
             label="Download as .ics file",
             data=cal.to_ical(),
