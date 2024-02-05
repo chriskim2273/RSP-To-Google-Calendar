@@ -228,7 +228,7 @@ else:
 
     all_shifts = []
     DAYS_OF_WEEK = {"SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"}
-    TYPES = {"Dispatch", "E/A", "E/SUP","Codispatch", "Field", "SUP"}
+    TYPES = {"Dispatch", "E/A", "E/SUP","Codispatch", "Field", "SUP","North Dispatch","South Dispatch"}
     rows_to_cols = {}
     # Process the uploaded file
     if uploaded_file:
