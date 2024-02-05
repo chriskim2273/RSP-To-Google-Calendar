@@ -290,7 +290,7 @@ else:
                             time_adjustment = "".join(content_inside_parentheses.split())
                             time_adjustment_mil, _min = convert_to_military_time(time_adjustment)
                             extracted_worker = "".join(parenthesis_pattern.sub('', shift_worker).split())
-                            st.write(extracted_worker)
+                            #st.write(extracted_worker)
                             if time_adjustment_mil <= 12:
                                 time_adjustments[extracted_worker] = (shift_start, time_adjustment)
                             else:
@@ -319,13 +319,13 @@ else:
                     if shift_detail not in TYPES:
                         continue
                     for shift_worker in shift_workers:
-                        #if shift_worker in time_adjustments:
-                        #    #st.write(time_adjustments[shift_worker])
-                        #    all_shifts.append(Shift(current_day, date, shift_worker, time_adjustments[shift_worker][0], time_adjustments[shift_worker][1], shift_location, shift_detail))
-                        #    st.write(all_shifts[-1])
-                        #    del time_adjustments[shift_worker]
-                        #else:
-                        all_shifts.append(Shift(current_day, date, shift_worker, shift_start, shift_end, shift_location, shift_detail))
+                        if shift_worker in time_adjustments:
+                            #st.write(time_adjustments[shift_worker])
+                            all_shifts.append(Shift(current_day, date, shift_worker, time_adjustments[shift_worker][0], time_adjustments[shift_worker][1], shift_location, shift_detail))
+                            st.write(all_shifts[-1])
+                            del time_adjustments[shift_worker]
+                        else:
+                            all_shifts.append(Shift(current_day, date, shift_worker, shift_start, shift_end, shift_location, shift_detail))
                     #print(f"[Shift: {current_day} - {date} : {shift_workers} > ({shift_start} - {shift_end}) > {shift_location} & {shift_detail}]")
                     #shift_workers = []
                     shift_detail = ""
