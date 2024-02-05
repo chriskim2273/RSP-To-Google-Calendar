@@ -96,6 +96,7 @@ class Shift():
         return f"RSP Shift ({self.worker}): {self.location} - {self.shift_detail}"
 
     def __str__(self):
+        #return f"[{self.date} - ({self.start_time} -> {self.end_time})"
         return f"[Shift: {self.day_of_week} - {self.date} : {self.worker} > ({self.start_time} - {self.end_time}) > {self.location} & {self.shift_detail}]"
 
 def get_calendar_id():
@@ -358,15 +359,15 @@ else:
                 "Shifts to Exclude In Import to Google Calendar or .ics File:",
                 user_shifts,
                 [])
-
-            st.write("Shifts To Exclude Selected:")
-            for shift in options:
-                st.write(shift)
-            st.write("Remaining Shifts (To be added):")
-            for shift in user_shifts:
-                if shift in options:
-                    continue
-                st.write(shift)
+            if options:
+                st.write("Shifts To Exclude Selected:")
+                for shift in options:
+                    st.write(shift)
+                st.write("Remaining Shifts (To be added):")
+                for shift in user_shifts:
+                    if shift in options:
+                        continue
+                    st.write(shift)
             st.divider()
             cal = Calendar()
             for shift in user_shifts:
