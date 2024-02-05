@@ -365,7 +365,7 @@ else:
                     st.write(shift)
                 st.write("Remaining Shifts (To be added):")
                 for shift in user_shifts:
-                    if shift in options:
+                    if shift in list(options):
                         continue
                     st.write(shift)
             st.divider()
