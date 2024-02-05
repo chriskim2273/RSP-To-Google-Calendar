@@ -366,9 +366,12 @@ else:
                 st.write("Remaining Shifts (To be added):")
                 # Tried adding __eq__ method and stuff but nothing was working...
                 for shift in user_shifts:
+                    shift_match = False
                     for shift_ in options:
                         if str(shift) == str(shift_):
-                            st.write(shift)
+                            shift_match = True
+                    if not shift_match:
+                        st.write(shift)
             st.divider()
             cal = Calendar()
             for shift in user_shifts:
