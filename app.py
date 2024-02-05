@@ -354,7 +354,7 @@ else:
                 user_shifts,
                 user_shifts)
 
-            st.write("You've selected:", [str(shift) for shift in all_shifts])
+            st.write("You've selected:", [str(shift) for shift in options])
             
             cal = Calendar()
             for selected in options:
