@@ -286,13 +286,16 @@ else:
                         if match:
                             st.write(match)
                             content_inside_parentheses = match.group(1)
+                            st.write(content_inside_parentheses)
                             # Assuming we are fixing the start time...?
                             time_adjustment = content_inside_parentheses.strip()
+                            st.write(time_adjustment)
                             time_adjustment_mil, _min = convert_to_military_time(time_adjustment)
                             if time_adjustment_mil <= 12:
                                 time_adjustments[shift_worker] = (shift_start, time_adjustment)
                             else:
                                 time_adjustments[shift_worker] = (time_adjustment, shift_end)
+                            st.write(time_adjustment)
                             shift_workers[idx] = parenthesis_pattern.sub('', shift_worker)
                     #st.write(shift_workers)
 
