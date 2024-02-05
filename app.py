@@ -369,7 +369,7 @@ else:
             st.divider()
             cal = Calendar()
             for shift in user_shifts:
-                if shift in options:
+                if str(shift) in options:
                     continue
                 event = Event()
                 event.add('summary', shift.get_title())
@@ -397,7 +397,7 @@ else:
                 calendar_id = None
                 for num, shift in enumerate(all_shifts):
                     if shift.is_worker(worker_input):
-                        if shift in options:
+                        if str(shift) in options:
                             continue
                         time.sleep(2)
                         self_shift_count += 1
