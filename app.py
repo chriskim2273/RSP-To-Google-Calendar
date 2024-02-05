@@ -364,12 +364,12 @@ else:
                 st.write(shift)
             st.write("Remaining Shifts (To be added):")
             for shift in user_shifts:
-                if str(shift) not in options:
+                if shift not in options:
                     st.write(shift)
             st.divider()
             cal = Calendar()
             for shift in user_shifts:
-                if str(shift) in options:
+                if shift in options:
                     continue
                 event = Event()
                 event.add('summary', shift.get_title())
@@ -397,7 +397,7 @@ else:
                 calendar_id = None
                 for num, shift in enumerate(all_shifts):
                     if shift.is_worker(worker_input):
-                        if str(shift) in options:
+                        if shift in options:
                             continue
                         time.sleep(2)
                         self_shift_count += 1
