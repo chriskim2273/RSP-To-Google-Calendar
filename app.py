@@ -319,10 +319,7 @@ else:
                     if shift_detail not in TYPES:
                         continue
                     for shift_worker in shift_workers:
-                        if shift_worker in time_adjustments:
-                            all_shifts.append(Shift(current_day, date, shift_worker, time_adjustments[shift_worker][0], time_adjustments[shift_worker][1], shift_location, shift_detail))
-                        else:
-                            all_shifts.append(Shift(current_day, date, shift_worker, shift_start, shift_end, shift_location, shift_detail))
+                        all_shifts.append(Shift(current_day, date, shift_worker, shift_start, shift_end, shift_location, shift_detail))
                     #print(f"[Shift: {current_day} - {date} : {shift_workers} > ({shift_start} - {shift_end}) > {shift_location} & {shift_detail}]")
                     #shift_workers = []
                     shift_detail = ""
