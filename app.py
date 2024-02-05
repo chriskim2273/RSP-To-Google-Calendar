@@ -355,7 +355,7 @@ else:
 
             options = st.multiselect(
                 "Shifts to Exclude In Import to Google Calendar or .ics File:",
-                [],
+                user_shifts,
                 [])
 
             st.write("Shifts To Exclude Selected:", [str(shift) for shift in options])
