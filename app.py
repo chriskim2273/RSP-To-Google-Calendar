@@ -91,7 +91,7 @@ class Shift():
                 if month > 12:
                     month = 1
                     year += 1
-        st.write(f"{self.end_time[-2:]} - {self.start_time[-2:]} - {self.end_time} - {year} - {month} - {day}")
+        #st.write(f"{self.end_time[-2:]} - {self.start_time[-2:]} - {self.end_time} - {year} - {month} - {day}")
         #st.write(f"{self.end_time} -> {str(end_hour)}")
         return datetime(year, month, day, end_hour, end_minute, 0)
 
@@ -276,7 +276,7 @@ else:
                     shift_detail = "".join(split_text[0].split()) # remove whitepace
                     if shift_detail not in TYPES:
                         continue
-                    shift_workers = "".join(split_text[1].split()) # remove whitespace
+                    shift_workers = split_text[1] # remove whitespace
                     shift_workers = shift_workers.split(',')
 
                     # Handle Edge case of Time Adjustments
@@ -284,7 +284,7 @@ else:
                     for idx, shift_worker in enumerate(shift_workers):
                         match = parenthesis_pattern.search(shift_worker)
                         if match:
-                            ##st.write(match)
+                            st.write(match)
                             content_inside_parentheses = match.group(1)
                             # Assuming we are fixing the start time...?
                             time_adjustment = content_inside_parentheses.strip()
@@ -413,7 +413,7 @@ else:
                         progress_bar.progress(int(((100/len(all_shifts)) * num) + 1), text=progress_text)
                         if not calendar_id:
                             calendar_id = get_calendar_id()
-                        st.write(shift)
+                        st.write("Uploading event: ",shift)
                         success = create_event_on_google_cal(shift, calendar_id)
                         if success:
                             success_count += 1
