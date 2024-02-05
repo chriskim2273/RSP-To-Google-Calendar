@@ -228,7 +228,7 @@ else:
 
     all_shifts = []
     DAYS_OF_WEEK = {"SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"}
-    TYPES = {"Dispatch", "E/A", "E/SUP","Codispatch", "Field"}
+    TYPES = {"Dispatch", "E/A", "E/SUP","Codispatch", "Field", "SUP"}
     rows_to_cols = {}
     # Process the uploaded file
     if uploaded_file:
@@ -276,7 +276,7 @@ else:
                     shift_detail = "".join(split_text[0].split()) # remove whitepace
                     if shift_detail not in TYPES:
                         continue
-                    shift_workers = "".join(split_text[1].split()) # remove whitespace
+                    shift_workers = split_text[1]#"".join(split_text[1].split()) # remove whitespace
                     shift_workers = shift_workers.split(',')
 
                     # Handle Edge case of Time Adjustments
@@ -290,12 +290,13 @@ else:
                             time_adjustment = "".join(content_inside_parentheses.split())
                             time_adjustment_mil, _min = convert_to_military_time(time_adjustment)
                             extracted_worker = "".join(parenthesis_pattern.sub('', shift_worker).split())
-                            #if time_adjustment_mil <= 12:
-                            #    time_adjustments[extracted_worker] = (shift_start, time_adjustment)
-                            #else:
-                            #    time_adjustments[extracted_worker] = (time_adjustment, shift_end)
-                            #shift_workers[idx] = parenthesis_pattern.sub('', shift_worker)
-                        #shift_workers[idx] = "".join(shift_worker.split())
+                            st.write(extracted_worker)
+                            if time_adjustment_mil <= 12:
+                                time_adjustments[extracted_worker] = (shift_start, time_adjustment)
+                            else:
+                                time_adjustments[extracted_worker] = (time_adjustment, shift_end)
+                            shift_workers[idx] = parenthesis_pattern.sub('', shift_worker)
+                        shift_workers[idx] = "".join(shift_worker.split())
                     st.write(time_adjustments)
                     #st.write(shift_workers)
 
@@ -319,9 +320,9 @@ else:
                         continue
                     for shift_worker in shift_workers:
                         if shift_worker in time_adjustments:
-                            st.write(time_adjustments[shift_worker])
+                            #st.write(time_adjustments[shift_worker])
                             all_shifts.append(Shift(current_day, date, shift_worker, time_adjustments[shift_worker][0], time_adjustments[shift_worker][1], shift_location, shift_detail))
-                            st.write(all_shifts[-1])
+                            #st.write(all_shifts)
                             del time_adjustments[shift_worker]
                         else:
                             all_shifts.append(Shift(current_day, date, shift_worker, shift_start, shift_end, shift_location, shift_detail))
