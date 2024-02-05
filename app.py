@@ -349,15 +349,21 @@ else:
             st.write(f"Worker String Occurences in CSV: {df.to_string().count(worker_input)}")
             st.write(f"Amount of Shifts Found and Processed: {len(user_shifts)}")
             st.write("Please make sure the two values match. (If not, it could indicate a disconnect)")
-            options = st.multiselect(
-                "Found Shifts (if Empty, invalid Worker String or no Shifts):",
-                user_shifts,
-                user_shifts)
+            st.write("Found Shifts (if Empty, invalid Worker String or no Shifts):")
+            for shift in user_shifts:
+                st.write(shift)
 
-            st.write("You've selected:", [str(shift) for shift in options])
+            options = st.multiselect(
+                "Shifts to Exclude In Import to Google Calendar or .ics File:",
+                [],
+                [])
+
+            st.write("Shifts To Exclude Selected:", [str(shift) for shift in options])
             
             cal = Calendar()
-            for selected in options:
+            for shift in user_shifts:
+                if shift in options:
+                    continue
                 event = Event()
                 event.add('summary', shift.get_title())
                 event.add('description', str(shift))
@@ -384,6 +390,8 @@ else:
                 calendar_id = None
                 for num, shift in enumerate(all_shifts):
                     if shift.is_worker(worker_input):
+                        if shift in options:
+                            continue
                         time.sleep(2)
                         self_shift_count += 1
                         progress_bar.progress(int(((100/len(all_shifts)) * num) + 1), text=progress_text)
