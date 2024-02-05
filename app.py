@@ -291,11 +291,11 @@ else:
                             time_adjustment = content_inside_parentheses.strip()
                             st.write(time_adjustment)
                             time_adjustment_mil, _min = convert_to_military_time(time_adjustment)
-                            shift_worker = parenthesis_pattern.sub('', shift_worker).strip()
+                            extracted_worker = parenthesis_pattern.sub('', shift_worker).strip()
                             if time_adjustment_mil <= 12:
-                                time_adjustments[shift_worker] = (shift_start, time_adjustment)
+                                time_adjustments[extracted_worker] = (shift_start, time_adjustment)
                             else:
-                                time_adjustments[shift_worker] = (time_adjustment, shift_end)
+                                time_adjustments[extracted_worker] = (time_adjustment, shift_end)
                             st.write(time_adjustments)
                             time_adjustments = {}
                     #st.write(shift_workers)
