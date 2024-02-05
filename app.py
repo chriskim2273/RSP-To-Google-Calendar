@@ -295,6 +295,7 @@ else:
                                 time_adjustments[shift_worker] = (time_adjustment, shift_end)
                             shift_workers[idx] = parenthesis_pattern.sub('', shift_worker)
                         shift_workers[idx] = "".join(shift_worker.split())
+                    st.write(time_adjustments)
                     #st.write(shift_workers)
 
                 # Try to implement time change in shifts (specified afterwards)
