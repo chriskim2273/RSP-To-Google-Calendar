@@ -95,12 +95,6 @@ class Shift():
     def get_title(self):
         return f"RSP Shift ({self.worker}): {self.location} - {self.shift_detail}"
 
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return str(self) == str(other)
-        else:
-            return False
-
     def __str__(self):
         #return f"[{self.date} - ({self.start_time} -> {self.end_time})"
         return f"[Shift: {self.day_of_week} - {self.date} : {self.worker} > ({self.start_time} - {self.end_time}) > {self.location} & {self.shift_detail}]"
@@ -372,7 +366,7 @@ else:
                 st.write("Remaining Shifts (To be added):")
                 for shift in user_shifts:
                     for shift_ in options:
-                        if shift == shift_:
+                        if str(shift) == str(shift_):
                             st.write("match")
                 for shift in user_shifts:
                     if shift in options:
