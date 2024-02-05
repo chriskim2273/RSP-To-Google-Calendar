@@ -345,21 +345,24 @@ else:
             for shift in all_shifts:
                 if shift.is_worker(worker_input):
                     user_shifts.append(shift)
-
+            st.divider()
             st.write(f"Worker String Occurences in CSV: {df.to_string().count(worker_input)}")
             st.write(f"Amount of Shifts Found and Processed: {len(user_shifts)}")
             st.write("Please make sure the two values match. (If not, it could indicate a disconnect)")
+            st.divider()
             st.write("Found Shifts (if Empty, invalid Worker String or no Shifts):")
             for shift in user_shifts:
                 st.write(shift)
-
+            st.divider()
             options = st.multiselect(
                 "Shifts to Exclude In Import to Google Calendar or .ics File:",
                 user_shifts,
                 [])
 
-            st.write("Shifts To Exclude Selected:", [str(shift) for shift in options])
-            
+            st.write("Shifts To Exclude Selected:")
+            for shift in options:
+                st.write(shift)
+            st.divider()
             cal = Calendar()
             for shift in user_shifts:
                 if shift in options:
