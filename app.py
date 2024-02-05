@@ -279,7 +279,7 @@ else:
                     shift_workers = split_text[1]#"".join(split_text[1].split()) # remove whitespace
                     shift_workers = shift_workers.split(',')
 
-                    # Handle Edge case of Time Adjustments
+                    # Handle Edge case of Time Adjustments Within Parenthesis
                     parenthesis_pattern = re.compile(r'\(([^)]+)\)$') #Dispatch: S15 (9PM)
                     for idx, shift_worker in enumerate(shift_workers):
                         match = parenthesis_pattern.search(shift_worker)
@@ -322,7 +322,7 @@ else:
                         if shift_worker in time_adjustments:
                             #st.write(time_adjustments[shift_worker])
                             all_shifts.append(Shift(current_day, date, shift_worker, time_adjustments[shift_worker][0], time_adjustments[shift_worker][1], shift_location, shift_detail))
-                            st.write(all_shifts[-1])
+                            #st.write(all_shifts[-1])
                             del time_adjustments[shift_worker]
                         else:
                             all_shifts.append(Shift(current_day, date, shift_worker, shift_start, shift_end, shift_location, shift_detail))
@@ -413,7 +413,7 @@ else:
                 calendar_id = None
                 for num, shift in enumerate(all_shifts):
                     if shift.is_worker(worker_input):
-                        if shift in [str(option) for option in options]:
+                        if str(shift) in [str(option) for option in options]:
                             continue
                         time.sleep(2)
                         self_shift_count += 1
