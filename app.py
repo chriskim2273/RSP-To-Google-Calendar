@@ -289,7 +289,7 @@ else:
                             # Assuming we are fixing the start time...?
                             time_adjustment = "".join(content_inside_parentheses.split())
                             time_adjustment_mil, _min = convert_to_military_time(time_adjustment)
-                            extracted_worker = "".join(parenthesis_pattern.sub('', shift_worker).split())
+                            extracted_worker = "".join(shift_worker.replace(content_inside_parentheses, "").split())
                             st.write(extracted_worker)
                             if time_adjustment_mil <= 12:
                                 time_adjustments[extracted_worker] = (shift_start, time_adjustment)
