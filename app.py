@@ -296,7 +296,7 @@ else:
                             else:
                                 time_adjustments[extracted_worker] = (time_adjustment, shift_end)
                             shift_workers[idx] = extracted_worker
-                        shift_workers[idx] = "".join(shift_worker.split())
+                        shift_workers[idx] = "".join(extracted_worker.split())
                     #st.write(time_adjustments)
                     #st.write(shift_workers)
 
