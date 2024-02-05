@@ -294,6 +294,7 @@ else:
                                 start_adjustment = "".join(multi_time_match.group(1).split())
                                 end_adjustment = "".join(multi_time_match.group(2).split())
                                 time_adjustments[extracted_worker] = (start_adjustment, end_adjustment)
+                                st.write(time_adjustments)
                             else:
                                 # Assuming we are fixing the start time...?
                                 time_adjustment = "".join(content_inside_parentheses.split())
