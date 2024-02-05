@@ -190,7 +190,7 @@ if "token" not in st.session_state:
     # create a button to start the OAuth2 flow
     oauth2 = OAuth2Component(CLIENT_ID, CLIENT_SECRET, AUTHORIZE_URL, TOKEN_URL, REFRESH_TOKEN_URL, REVOKE_TOKEN_URL)
     result = oauth2.authorize_button(
-        name="Continue with Google",
+        name="Log Into Google Calendar",
         icon="https://www.google.com.tw/favicon.ico",
         redirect_uri=REDIRECT_URI, #"http://localhost:8501",
         scope=SCOPE, #"openid email profile",
@@ -224,7 +224,7 @@ else:
     st.write("You are logged in! Refresh to log out or log back in!")
     #st.write(st.session_state["token"])
 
-    uploaded_file = st.file_uploader("Choose a CSV file", type='csv', key = "test")
+    uploaded_file = st.file_uploader("Upload RSP Schedule CSV File", type='csv', key = "test")
 
     all_shifts = []
     DAYS_OF_WEEK = {"SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"}
