@@ -294,8 +294,8 @@ else:
                             #    time_adjustments[extracted_worker] = (shift_start, time_adjustment)
                             #else:
                             #    time_adjustments[extracted_worker] = (time_adjustment, shift_end)
-                            shift_workers[idx] = parenthesis_pattern.sub('', shift_worker)
-                        shift_workers[idx] = "".join(shift_worker.split())
+                            #shift_workers[idx] = parenthesis_pattern.sub('', shift_worker)
+                        #shift_workers[idx] = "".join(shift_worker.split())
                     st.write(time_adjustments)
                     #st.write(shift_workers)
 
