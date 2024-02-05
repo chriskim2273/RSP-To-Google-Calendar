@@ -410,6 +410,7 @@ else:
                         progress_bar.progress(int(((100/len(all_shifts)) * num) + 1), text=progress_text)
                         if not calendar_id:
                             calendar_id = get_calendar_id()
+                        st.write(shift)
                         success = create_event_on_google_cal(shift, calendar_id)
                         if success:
                             success_count += 1
