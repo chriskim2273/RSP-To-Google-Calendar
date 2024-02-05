@@ -78,7 +78,10 @@ class Shift():
         month = int(month)
         year = datetime.now().year
         end_hour, end_minute = convert_to_military_time(self.end_time)
-        if self.end_time[-2:] == "AM" and self.start_time[-2:] == "PM":
+        start_hour, start_minute = convert_to_military_time(self.start_time)
+        if self.end_time[-2:] == "AM" and self.start_time[-2:] == "PM" or (
+            self.end_time[-2:] == self.start_time[-2:] and end_hour < start_hour
+        ):
             day += 1
             max_days = calendar.monthrange(datetime.now().year, month)[1]
             # Increment to next month
