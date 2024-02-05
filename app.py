@@ -371,6 +371,10 @@ else:
                     st.write(shift)
                 st.write("Remaining Shifts (To be added):")
                 for shift in user_shifts:
+                    for shift_ in options:
+                        if shift == shift_:
+                            st.write("match")
+                for shift in user_shifts:
                     if shift in options:
                         continue
                     st.write(shift)
