@@ -296,14 +296,17 @@ else:
                                 time_adjustments[extracted_worker] = (start_adjustment, end_adjustment)
                                 #st.write(time_adjustments)
                             else:
-                                # Assuming we are fixing the start time...?
-                                time_adjustment = "".join(content_inside_parentheses.split())
-                                time_adjustment_mil, _min = convert_to_military_time(time_adjustment)
-                                #st.write(extracted_worker)
-                                if time_adjustment_mil <= 12:
-                                    time_adjustments[extracted_worker] = (shift_start, time_adjustment)
-                                else:
-                                    time_adjustments[extracted_worker] = (time_adjustment, shift_end)
+                                single_time_pattern = re.compile(r"^\s*(1[0-2]|[1-9])\s*[APap][Mm]$")
+                                single_time_match = single_time_pattern.search(content_inside_parentheses)
+                                if single_time_match:
+                                    # Assuming we are fixing the start time...?
+                                    time_adjustment = "".join(content_inside_parentheses.split())
+                                    time_adjustment_mil, _min = convert_to_military_time(time_adjustment)
+                                    #st.write(extracted_worker)
+                                    if time_adjustment_mil <= 12:
+                                        time_adjustments[extracted_worker] = (shift_start, time_adjustment)
+                                    else:
+                                        time_adjustments[extracted_worker] = (time_adjustment, shift_end)
                             shift_workers[idx] = extracted_worker
                         shift_workers[idx] = "".join(shift_workers[idx].split())
                     #st.write(time_adjustments)
